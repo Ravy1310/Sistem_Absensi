@@ -1,0 +1,45 @@
+
+
+.body {
+    -fx-background-color: #ffffff;
+}
+
+
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+}
+
+.SignUp-btn {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 0px;
+   -fx-border-color: black;
+
+}
+
+.SignUp-btn:hover {
+    -fx-background-color: #8f8f8f;
+}
+
+.pn-username {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 3px;
+    -fx-border-color: black;
+}
+
+.username, .password {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 3px;
+    
+}
+
+.login-btn {
+    -fx-background-color: #242B33;
+    -fx-border-radius: 5px;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: black;
+    
+}
+
+.login-btn:hover {
+    -fx-background-color: #34495e;
+}
