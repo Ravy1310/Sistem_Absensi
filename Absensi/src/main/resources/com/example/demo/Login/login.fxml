@@ -12,26 +12,25 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox prefHeight="650.0" prefWidth="1311.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.HelloController">
+<VBox prefHeight="650.0" prefWidth="1311.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.LoginController">
    <children>
       <Pane prefHeight="793.0" prefWidth="1305.0">
          <children>
             <Pane prefHeight="650.0" prefWidth="401.0" styleClass="sidebar" stylesheets="@styles.css">
                <children>
-                  <ImageView fitHeight="145.0" fitWidth="158.0" layoutX="128.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="145.0" fitWidth="158.0" layoutX="128.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/logo_bicopi-removebg-preview%20(1).png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="160.0" layoutY="486.0" text="BICOPI" textFill="#ffecec">
+                  <Label layoutX="152.0" layoutY="456.0" text="BICOPI" textFill="#ffecec">
                      <font>
                         <Font name="Century Schoolbook Bold" size="24.0" />
                      </font>
                   </Label>
                </children>
             </Pane>
-            <Button fx:id ="SignUpButton" layoutX="1112.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" styleClass="SignUp-btn" stylesheets="@styles.css" text="Create Account">
+            <Button fx:id="SignUpButton" layoutX="1112.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" styleClass="SignUp-btn" stylesheets="@styles.css" text="Create Account">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" height="28.02" offsetX="3.0" offsetY="2.0" radius="12.8325" width="25.31">
                      <color>
@@ -70,7 +69,7 @@
                         <Image url="@../icon/username.png" />
                      </image>
                   </ImageView>
-                  <TextField layoutX="31.0" layoutY="5.0" prefHeight="30.0" prefWidth="496.0" promptText="Enter Username" styleClass="username" stylesheets="@styles.css" />
+                  <TextField fx:id="UsernameField" layoutX="31.0" layoutY="5.0" prefHeight="30.0" prefWidth="496.0" promptText="Enter Username" styleClass="username" stylesheets="@styles.css" />
                </children>
             </Pane>
             <Button fx:id="loginButton" layoutX="556.0" layoutY="542.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="254.0" styleClass="login-btn" stylesheets="@styles.css" text="Login">
@@ -85,7 +84,7 @@
                         <Image url="@../icon/password.png" />
                      </image>
                   </ImageView>
-                  <PasswordField layoutX="41.0" layoutY="3.0" prefHeight="30.0" prefWidth="503.0" promptText="Enter Password" styleClass="password" stylesheets="@styles.css" />
+                  <PasswordField fx:id="PasswordField" layoutX="41.0" layoutY="3.0" prefHeight="30.0" prefWidth="503.0" promptText="Enter Password" styleClass="password" stylesheets="@styles.css" />
                </children>
             </Pane>
          </children>
