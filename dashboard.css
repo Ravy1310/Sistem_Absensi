@@ -1,0 +1,30 @@
+.body {
+    -fx-background-color: #ffffff;
+}
+.atas {
+    -fx-background-color: #028D02;
+}
+.menu1 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.menu2 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.menu3 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.buttonmenu1 {
+    -fx-background-radius: 20px;
+}
+.buttonmenu2 {
+    -fx-background-radius: 20px;
+}
+.buttonmenu3 {
+    -fx-background-radius: 20px;
+}
+.tabledashboard {
+    -fx-background-color: #ffffff;
+}
