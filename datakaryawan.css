@@ -1,0 +1,68 @@
+.body {
+    -fx-background-color: #b2afaf;
+}
+.atas {
+    -fx-background-color: #d6d6d6;
+}
+.pencarian {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.group1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.ID {
+    -fx-background-color: #d6d6d6;
+}
+.nama {
+    -fx-background-color: #d6d6d6;
+}
+.tanggalmasuk {
+    -fx-background-color: #d6d6d6;
+}
+.status {
+    -fx-background-color: #d6d6d6;
+}
+.ID1 {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.nama1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.alamat {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.nohp {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.email {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.tglmsk {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.posisi {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.status1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttonbatal {
+    -fx-background-color: #fe0000;
+}
+.buttonsimpan {
+    -fx-background-color: #028D02;
+}
