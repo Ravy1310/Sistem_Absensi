@@ -1,0 +1,11 @@
+.body {
+    -fx-background-color: #ffffff;
+}
+.buttondata {
+    -fx-background-color: #242B33;
+    -fx-background-radius: 20px;
+}
+.buttonrekap {
+    -fx-background-color: #242B33;
+    -fx-background-radius: 20px;
+}
