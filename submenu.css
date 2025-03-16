@@ -1,0 +1,14 @@
+.body {
+    -fx-background-color: #c5c5c5;
+}
+.sidebar {
+    -fx-background-color: #ffffff;
+}
+.buttondata {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30px;
+}
+.buttonrekap {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 30px;
+}
