@@ -1,0 +1,22 @@
+.body {
+    -fx-background-color: #d6d6d6;
+}
+.atas {
+    -fx-background-color: #028D02;
+}
+.dalam {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.ButtonTambah {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.pencarian {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
