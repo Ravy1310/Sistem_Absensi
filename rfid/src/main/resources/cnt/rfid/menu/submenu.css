@@ -1,0 +1,23 @@
+.body {
+    -fx-background-color: #c5c5c5;
+}
+.sidebar {
+    -fx-background-color: #ffffff;
+}
+.buttondata {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-padding-left: -30px;
+}
+
+.buttondata:hover {
+    -fx-background-color: #989898;
+}
+.buttonrekap {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+
+.buttonrekap:hover {
+    -fx-background-color: #989898;
+}

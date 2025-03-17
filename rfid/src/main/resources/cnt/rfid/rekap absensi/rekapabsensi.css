@@ -1,0 +1,86 @@
+.body {
+    -fx-background-color: #d6d6d6;
+}
+.atas {
+    -fx-background-color: #028D02;
+}
+.dalam {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.ButtonTambah {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+
+.ButtonTambah:hover {
+    -fx-background-color: #18b018;
+}
+.txt-cari {
+    -fx-background-color: #ffffff;
+    -fx-border-style: solid;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+
+.buttoncari:hover {
+    -fx-background-color: #00ff00;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.menu-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: rgb(52, 51, 51);
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+    -fx-border-style: solid ;
+}
+
+.menu-button:hover {
+    -fx-background-color: #acacac;
+}
+
+.menu-item {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: rgb(52, 51, 51);
+}
+
+.menu-item:hover {
+    -fx-background-color: #acacac;
+}
