@@ -1,14 +1,24 @@
-.body {
-    -fx-background-color: #c5c5c5;
-}
-.sidebar {
+.pane{
     -fx-background-color: #ffffff;
 }
-.buttondata {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 30px;
+.button-1{
+    -fx-background-color: #ffffff ;
 }
-.buttonrekap {
+.dk{
     -fx-background-color: #ffffff;
-    -fx-background-radius: 30px;
 }
+.djk{
+    -fx-background-color: #ffffff;
+}
+.dkk{
+    -fx-background-color: #ffffff;
+}
+.RA{
+    -fx-background-color: #ffffff;
+}
+.pl{
+    -fx-background-color: #ffffff;
+}
+.buttondashboard:hover {
+    -fx-background-color: #ffffff;
+} 
