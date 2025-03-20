@@ -9,21 +9,18 @@ public class Absensi {
     private Timestamp waktuKeluar;
     private String hari;
     private String tanggal;
-    private String totalJam;
-
 
     // Constructor
-    public Absensi(String id, String nama, Timestamp waktuMasuk, Timestamp waktuKeluar, String hari, String tanggal, String totalJam) {
+    public Absensi(String id, String nama, Timestamp waktuMasuk, Timestamp waktuKeluar, String hari, String tanggal) {
         this.id = id;
         this.nama = nama;
         this.waktuMasuk = waktuMasuk;
         this.waktuKeluar = waktuKeluar;
         this.hari = hari;
         this.tanggal = tanggal;
-        this.totalJam = totalJam;
     }
 
-    // Getter & Setter
+  // Getter & Setter
     public String getId() {
         return id;
     }
@@ -56,19 +53,19 @@ public class Absensi {
         this.waktuKeluar = waktuKeluar;
     }
 
-     public void setTanggal(String tanggal) {
+     public String getHari() {
+        return hari;
+    }
+
+    public void setHari(String hari) {
+        this.hari = hari;
+    }
+
+     public String getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(String tanggal) {
         this.tanggal = tanggal;
-    }
-
-    public String getJamMasuk() {
-        return jamMasuk;
-    }
-    
-     public String getTotalJam() {
-        return totalJam;
-    }
-
-    public void setTotalJam(String totalJam) {
-        this.totalJam = totalJam;
     }
 }
