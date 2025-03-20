@@ -1,4 +1,4 @@
-package cnt.absensi;
+package cnt.rfid;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +30,8 @@ public class RekapAbsensiController {
     @FXML
     private TableColumn<Absensi, String> colJamPulang;
     @FXML
+    private TableColumn<Absensi, String> colTotalJam;
+    @FXML
     private ComboBox<String> cmbBulan;
     @FXML
     private ComboBox<String> cmbTahun;
@@ -41,7 +43,42 @@ public class RekapAbsensiController {
     private ObservableList<Absensi> dataAbsensi = FXCollections.observableArrayList();
 
     public void initialize() {
-        btnCari.setOnAction(event -> loadData());
+        btnCari.setOnAction(event -> {
+            dataAbsensi.clear();
+            String query = "SELECT a.nama, DAYNAME(a.tanggal) AS hari, a.tanggal, a.jam_masuk, " +
+                           "a.jam_pulang, TIMEDIFF(a.jam_pulang, a.jam_masuk) AS total_jam " +
+                           "FROM absensi a WHERE 1=1";
+
+            if (cmbBulan.getValue() != null && !cmbBulan.getValue().isEmpty()) {
+                query += " AND MONTH(a.tanggal) = " + cmbBulan.getValue();
+            }
+            if (cmbTahun.getValue() != null && !cmbTahun.getValue().isEmpty()) {
+                query += " AND YEAR(a.tanggal) = " + cmbTahun.getValue();
+            }
+            if (!txtCari.getText().isEmpty()) {
+                query += " AND a.nama LIKE '%" + txtCari.getText() + "%'";
+            }
+
+            try (Connection conn = DatabaseConnection.connect();
+                 PreparedStatement ps = conn.prepareStatement(query);
+                 ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    dataAbsensi.add(new Absensi(
+                        rs.getString("nama"),
+                        rs.getString("hari"),
+                        rs.getString("tanggal"),
+                        rs.getString("jam_masuk"),
+                        rs.getString("jam_pulang"),
+                        rs.getString("total_jam")
+                    ));
+                }
+
+                tblAbsensi.setItems(dataAbsensi);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
 
         colNo.setCellFactory(tc -> new TableCell<>() {
             @Override
@@ -60,46 +97,8 @@ public class RekapAbsensiController {
         colTanggal.setCellValueFactory(cellData -> cellData.getValue().tanggalProperty());
         colJamMasuk.setCellValueFactory(cellData -> cellData.getValue().jamMasukProperty());
         colJamPulang.setCellValueFactory(cellData -> cellData.getValue().jamPulangProperty());
+        colTotalJam.setCellValueFactory(cellData -> cellData.getValue().totalJamProperty());
 
-        loadData();
-    }
-
-    private void loadData() {
-        dataAbsensi.clear();
-        String query = "SELECT a.nama, DAYNAME(a.tanggal) AS hari, a.tanggal, a.jam_masuk, a.jam_pulang " +
-                       "FROM absensi a WHERE 1=1";
-
-     
-        if (cmbBulan.getValue() != null && !cmbBulan.getValue().isEmpty()) {
-            query += " AND MONTH(a.tanggal) = " + cmbBulan.getValue();
-        }
-        if (cmbTahun.getValue() != null && !cmbTahun.getValue().isEmpty()) {
-            query += " AND YEAR(a.tanggal) = " + cmbTahun.getValue();
-        }
-        if (!txtCari.getText().isEmpty()) {
-            query += " AND a.nama LIKE '%" + txtCari.getText() + "%'";
-        }
-
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                dataAbsensi.add(new Absensi(
-                        rs.getString("nama"),
-                        rs.getString("hari"),
-                        rs.getString("tanggal"),
-                        rs.getString("jam_masuk"),
-                        rs.getString("jam_pulang")
-                ));
-            }
-            tblAbsensi.setItems(dataAbsensi);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        btnCari.fire(); // Langsung load data saat aplikasi dijalankan
     }
 }
-
-
-
-
