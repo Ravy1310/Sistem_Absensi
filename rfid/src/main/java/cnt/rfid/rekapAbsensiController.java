@@ -92,12 +92,12 @@ public class RekapAbsensiController {
             }
         });
 
-        colNama.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
-        colHari.setCellValueFactory(cellData -> cellData.getValue().hariProperty());
-        colTanggal.setCellValueFactory(cellData -> cellData.getValue().tanggalProperty());
-        colJamMasuk.setCellValueFactory(cellData -> cellData.getValue().jamMasukProperty());
-        colJamPulang.setCellValueFactory(cellData -> cellData.getValue().jamPulangProperty());
-        colTotalJam.setCellValueFactory(cellData -> cellData.getValue().totalJamProperty());
+       colNama.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNama()));
+colHari.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHari()));
+colTanggal.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTanggal()));
+colJamMasuk.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getJamMasuk()));
+colJamPulang.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getJamPulang()));
+colTotalJam.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalJam()));
 
         btnCari.fire(); // Langsung load data saat aplikasi dijalankan
     }
