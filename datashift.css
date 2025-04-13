@@ -1,0 +1,18 @@
+.body {
+    -fx-background-color: #b2afaf;
+}
+.atas {
+    -fx-background-color: #dfdcdc;
+}
+.group1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.pencarian {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
