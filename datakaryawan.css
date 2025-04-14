@@ -1,0 +1,146 @@
+.body {
+    -fx-background-color: #ffffff;
+}
+.atas {
+    -fx-background-color: #d6d6d6;
+}
+.textfield1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.group1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.ID {
+    -fx-background-color: #d6d6d6;
+}
+.nama {
+    -fx-background-color: #d6d6d6;
+}
+.tanggalmasuk {
+    -fx-background-color: #d6d6d6;
+}
+.status {
+    -fx-background-color: #d6d6d6;
+}
+.ID1 {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.nama1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.alamat {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.nohp {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.email {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.tglmsk {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.posisi {
+    -fx-background-color: #d6d6d6;
+    -fx-background-radius: 20px;
+}
+.status1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttontambah {
+    -fx-background-color: #028D02;
+}
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.pane1{
+    -fx-background-color: #ffffff; 
+}
+.namadalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.alamatdalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.nohpdalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.emaildalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.tglmskdalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.posisidalam{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}
+.buttonsimpan {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.buttonbatal {
+    -fx-background-color: #d20606;
+    -fx-background-radius: 20px;
+}
