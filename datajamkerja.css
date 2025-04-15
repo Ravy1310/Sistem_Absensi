@@ -1,0 +1,86 @@
+.pane{
+    -fx-background-color:#B7B7B7;
+}
+.pane-2{
+    -fx-background-color:#E2E0E0;
+}
+.txt{
+    -fx-border-radius: 25px;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 25px;
+}
+.button{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 20px;
+}
+.pane-3{
+    -fx-background-color:#FFFFFF;
+}
+.button-2{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+}
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.pane-4{
+    -fx-background-color:#ffffff;
+}
+.pnn{
+    -fx-background-color:#F2F0F0;
+}
+.pnn-1{
+    -fx-background-color:#ffffff;
+}
+.pnn-2{
+    -fx-background-color:#f2f0f0;
+}
+.pnn-3{
+    -fx-background-color:#ffffff;
+}
+.btt-1{
+    -fx-border-radius:0px;
+    -fx-border-style: solid;
+    -fx-background-color: #C60000;
+    -fx-background-radius: 0px;
+}
+.btt-2{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+
+}
