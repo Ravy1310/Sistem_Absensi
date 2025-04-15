@@ -1,0 +1,76 @@
+.pane{
+    -fx-background-color: #B7B7B7;
+}
+.pane-2{
+   -fx-background-color: #E2E0E0;
+}
+.txt{
+    -fx-border-radius: 25px;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 25px;
+}
+.button-1{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 20px;
+}
+.pane-3{
+   -fx-background-color: #FFFFFF;
+}
+.buttontambah{
+    -fx-background-color: #089A03;
+}
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.panedalam{
+    -fx-background-color: #FFFFFF;
+ }
+ .panepane{
+    -fx-background-color: #ffffff;
+ }
+ .panepane1{
+    -fx-background-color:#F2f0f0;
+}
+.panepane2{
+    -fx-background-color: #ffffff;
+}
+.panepane3{
+    -fx-background-color: #F2f0f0;
+}
+.buttonbatal{
+    -fx-background-color: #dc1212;
+}
+.buttonsimpan{
+    -fx-background-color: #089A03;
+}
