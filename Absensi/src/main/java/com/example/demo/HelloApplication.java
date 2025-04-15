@@ -11,10 +11,10 @@ import javafx.stage.Stage;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/Login/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/absensi karyawan/absen.fxml"));
 
         Scene scene = new Scene(root);
-        primaryStage.setTitle("Modern Login UI");
+        primaryStage.setTitle("BICOPI");
         primaryStage.setScene(scene);
  // Maksimalkan jendela saat startup
     primaryStage.setMaximized(true);

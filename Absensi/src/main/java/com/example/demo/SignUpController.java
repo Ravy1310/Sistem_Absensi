@@ -46,7 +46,7 @@ public void initialize() {
     SignUpButton.setOnAction(event -> handleSignUp());
    
     SignInButton.setOnAction(event -> loadPage("/com/example/demo/Login/login.fxml"));
-        // 
+        
         }
     
             

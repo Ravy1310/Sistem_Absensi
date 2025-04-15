@@ -6,6 +6,7 @@ module com.example.demo {
     requires org.mongodb.driver.core;
     requires java.xml;
     requires jbcrypt;
+    requires javafx.base;
 
 
     opens com.example.demo to javafx.fxml;

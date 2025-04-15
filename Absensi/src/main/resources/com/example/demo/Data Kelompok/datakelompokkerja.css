@@ -1,0 +1,26 @@
+.pane{
+    -fx-background-color: #B7B7B7;
+}
+.pane-2{
+   -fx-background-color: #E2E0E0;
+}
+.txt{
+    -fx-border-radius: 25px;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-background-color: #FFFFFF;
+}
+.button-1{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 20px;
+}
+.pane-3{
+   -fx-background-color: #FFFFFF;
+}
+.txt-2{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+}
+
+

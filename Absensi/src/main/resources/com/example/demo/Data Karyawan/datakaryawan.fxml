@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@datakaryawan.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.DataKaryawanControl">
+   <children>
+      <Pane layoutY="-85.0" prefHeight="140.0" prefWidth="1059.0" styleClass="atas" stylesheets="@datakaryawan.css">
+         <children>
+            <Button fx:id="btncari" layoutX="257.0" layoutY="99.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="53.0" styleClass="buttoncari" stylesheets="@datakaryawan.css" />
+            <ImageView fx:id="imcari" fitHeight="17.0" fitWidth="17.0" layoutX="275.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icon/cari.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="txtcari" layoutX="59.0" layoutY="102.0" prefHeight="25.0" prefWidth="183.0" promptText="Nama Karyawan" styleClass="textfield1" stylesheets="@datakaryawan.css" />
+         </children>
+      </Pane>
+      <TableView fx:id="tableKaryawan" layoutX="42.0" layoutY="170.0" prefHeight="386.0" prefWidth="994.0">
+        <columns>
+          <TableColumn fx:id="colNo" prefWidth="32.66665554046631" text="No" />
+          <TableColumn fx:id="colNama" prefWidth="133.99999618530273" text="Nama" />
+            <TableColumn fx:id="colAlamat" prefWidth="136.66673278808594" text="Alamat" />
+            <TableColumn fx:id="colHP" minWidth="8.0" prefWidth="118.0" text="No. Hp" />
+            <TableColumn fx:id="colEmail" prefWidth="163.33328247070312" text="Email" />
+            <TableColumn fx:id="colTanggalMasuk" prefWidth="141.3333740234375" text="Tanggal Masuk" />
+            <TableColumn fx:id="colPosisi" prefWidth="119.33331298828125" text="Posisi" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Line endX="958.0" endY="7.62939453125E-6" layoutX="101.0" layoutY="117.0" startX="-100.0" />
+      <Label layoutX="23.0" layoutY="80.0" text="Data Karyawan">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="btntambah" layoutX="954.0" layoutY="80.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="82.0" styleClass="buttontambah" stylesheets="@datakaryawan.css" text="Tambah" textFill="WHITE">
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+         <font>
+            <Font name="Century Schoolbook" size="12.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="imtambah" fitHeight="17.0" fitWidth="23.0" layoutX="963.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icon/tambah.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnedit" layoutX="49.0" layoutY="130.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" styleClass="buttonsimpan" stylesheets="@datakaryawan.css" text="Edit" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnhapus" layoutX="42.0" layoutY="572.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="90.0" styleClass="buttonbatal" stylesheets="@datakaryawan.css" text="Hapus" textFill="#fdfdfd">
+         <font>
+            <Font name="Century Schoolbook Bold" size="14.0" />
+         </font>
+      </Button>
+      <StackPane fx:id="popkaryawan" layoutX="202.0" layoutY="2.0" prefHeight="585.0" prefWidth="709.0">
+         <children>
+            <Pane prefHeight="585.0" prefWidth="760.0" styleClass="pane1" stylesheets="@datakaryawan.css">
+               <children>
+                  <VBox layoutY="7.0" prefHeight="585.0" prefWidth="760.0" styleClass="boxdata" stylesheets="@../Form%20Data%20Karyawan/formdata.css">
+                     <children>
+                        <Pane prefHeight="45.0" prefWidth="760.0">
+                           <children>
+                              <Line endX="684.6262817382812" layoutX="24.0" layoutY="45.0" startX="-24.000015258789062" startY="-1.0" />
+                              <Label fx:id="lbpopup" layoutX="14.0" layoutY="17.0" prefHeight="23.0" prefWidth="274.0" text="Tambah Data Karyawan">
+                                 <font>
+                                    <Font name="Century Schoolbook Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Label contentDisplay="RIGHT" graphicTextGap="200.0" prefHeight="60.0" prefWidth="758.0" styleClass="pnn-2" stylesheets="@datakaryawan.css" text="RFID ">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <graphic>
+                              <TextField fx:id="txtrfid" prefHeight="33.0" prefWidth="406.0" styleClass="namadalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="200.0" prefHeight="61.0" prefWidth="981.0" text="Nama">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <graphic>
+                              <TextField fx:id="txtnama" prefHeight="33.0" prefWidth="406.0" styleClass="namadalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="190.0" prefHeight="60.0" prefWidth="989.0" text="Alamat">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <graphic>
+                              <TextField fx:id="txtalamat" prefHeight="30.0" prefWidth="406.0" styleClass="alamatdalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="189.0" prefHeight="58.0" prefWidth="971.0" text="No. Hp">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <graphic>
+                              <TextField fx:id="txthp" prefHeight="30.0" prefWidth="406.0" styleClass="nohpdalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="203.0" prefHeight="53.0" prefWidth="985.0" text="Email">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <graphic>
+                              <TextField fx:id="txtemail" prefHeight="30.0" prefWidth="406.0" styleClass="emaildalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="118.0" prefHeight="73.0" prefWidth="967.0" stylesheets="@../menu/submenu.css" text="Tanggal Masuk">
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <graphic>
+                              <DatePicker fx:id="txttanggal" prefHeight="30.0" prefWidth="406.0" styleClass="posisidalam" stylesheets="@../menu/submenu.css" />
+                           </graphic>
+                        </Label>
+                        <Label contentDisplay="RIGHT" graphicTextGap="200.0" prefHeight="55.0" prefWidth="981.0" text="Posisi">
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <font>
+                              <Font name="Century Schoolbook" size="18.0" />
+                           </font>
+                           <graphic>
+                              <TextField fx:id="txtposisi" prefHeight="32.0" prefWidth="406.0" styleClass="posisidalam" stylesheets="@datakaryawan.css" />
+                           </graphic>
+                        </Label>
+                        <Pane prefHeight="125.0" prefWidth="760.0">
+                           <children>
+                              <Button fx:id="btnsimpan" layoutX="589.0" layoutY="43.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="105.0" styleClass="buttonsimpan" stylesheets="@datakaryawan.css" text="Simpan" textFill="WHITE">
+                                 <font>
+                                    <Font name="Century Schoolbook Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnbatal" layoutX="35.0" layoutY="43.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="105.0" styleClass="buttonbatal" stylesheets="@datakaryawan.css" text="Batal" textFill="WHITE">
+                                 <font>
+                                    <Font name="Century Schoolbook Bold" size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+   </children>
+</Pane>

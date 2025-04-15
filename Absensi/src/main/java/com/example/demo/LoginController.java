@@ -69,6 +69,7 @@ public class LoginController {
                 showAlert("Login berhasil! Selamat datang, " + username + "!", AlertType.INFORMATION);
                 UsernameField.clear();
                 PasswordField.clear();
+                loadDashboard();
             } else {
                 showAlert("Login gagal! Password salah.", AlertType.ERROR);
                 UsernameField.clear();
@@ -83,6 +84,22 @@ public class LoginController {
                 
                 
         
+        private void loadDashboard() {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo/menu/submenu.fxml")); // ganti path sesuai letak dashboard.fxml kamu
+                Parent root = loader.load();
+        
+                // Ambil stage dari elemen GUI saat ini (misalnya dari UsernameField)
+                Stage stage = (Stage) UsernameField.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("BICOPI");
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert("Gagal memuat halaman dashboard.", AlertType.ERROR);
+            }
+        }
+
         private void loadPage(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));

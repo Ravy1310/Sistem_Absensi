@@ -1,0 +1,67 @@
+.body {
+    -fx-background-color: #ffffff;
+}
+.atas {
+    -fx-background-color: #028D02;
+}
+.menu1 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.menu2 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.menu3 {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.buttonmenu1 {
+    -fx-background-radius: 20px;
+}
+.buttonmenu2 {
+    -fx-background-radius: 20px;
+}
+.buttonmenu3 {
+    -fx-background-radius: 20px;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* .table-view:focused {
+    -fx-border-color: #3498db;
+    -fx-background-color: #f5f5f5; 
+    -fx-border-width: 2px;
+} */
+
