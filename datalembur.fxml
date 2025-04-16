@@ -27,11 +27,11 @@
             </Label>
          </children>
       </Pane>
-      <Pane layoutX="32.0" layoutY="98.0" prefHeight="496.0" prefWidth="994.0" styleClass="pane-bawah" stylesheets="@datalembur.css">
+      <Pane layoutX="32.0" layoutY="98.0" prefHeight="509.0" prefWidth="996.0" styleClass="pane-bawah" stylesheets="@datalembur.css">
          <children>
             <Label layoutX="21.0" layoutY="42.0" styleClass="lb-3" stylesheets="@datalembur.css" text="Data Lembur">
                <font>
-                  <Font size="15.0" />
+                  <Font name="Century Schoolbook Bold" size="15.0" />
                </font>
             </Label>
             <TextField layoutX="761.0" layoutY="89.0" prefHeight="28.0" prefWidth="156.0" styleClass="cari" stylesheets="@datalembur.css" text="Cari ID/ Nama Karyawan " />
@@ -42,14 +42,17 @@
                </image>
             </ImageView>
             <Line endX="843.0" endY="-43.0" layoutX="151.0" layoutY="116.0" startX="-150.99998474121094" startY="-43.0" />
-            <TableView layoutX="292.0" layoutY="169.0" prefHeight="273.0" prefWidth="410.0" styleClass="tabel" stylesheets="@datalembur.css">
+            <TableView layoutX="12.0" layoutY="149.0" prefHeight="293.0" prefWidth="970.0" styleClass="tabel" stylesheets="@datalembur.css">
               <columns>
                 <TableColumn prefWidth="59.33331298828125" text="no" />
                 <TableColumn prefWidth="167.33334350585938" text="Nama" />
-                  <TableColumn minWidth="0.0" prefWidth="180.0" text="Jam Lembur" />
+                  <TableColumn minWidth="0.0" prefWidth="543.3331604003906" text="Jam Lembur" />
               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
             </TableView>
-            <Button layoutX="880.0" layoutY="442.0" mnemonicParsing="false" styleClass="calculation" stylesheets="@datalembur.css" text="Calculation" />
+            <Button layoutX="878.0" layoutY="459.0" mnemonicParsing="false" styleClass="calculation" stylesheets="@datalembur.css" text="Calculation" textFill="WHITE" />
          </children>
       </Pane>
    </children>
