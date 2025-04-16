@@ -1,0 +1,77 @@
+.body {
+    -fx-background-color: #b2afaf;
+}
+.atas {
+    -fx-background-color: #dfdcdc;
+}
+.group1 {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+.buttontambah {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 5px;
+}
+.txtfield1 {
+    -fx-background-radius: 20px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20px;
+}
+.buttoncari {
+    -fx-background-color: #028D02;
+    -fx-background-radius: 20px;
+}
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.panee{
+    -fx-background-color:#ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 15px;
+}
+.panee1{
+    -fx-background-color:#F2F0F0;
+}
+.panee2{
+    -fx-background-color:#ffffff;
+}
+.panee3{
+    -fx-background-color:#f2f0f0;
+}
+.btt{
+    -fx-background-color:#C60000;
+}
+.btt1{
+    -fx-background-color:#089A03;
+}
+
