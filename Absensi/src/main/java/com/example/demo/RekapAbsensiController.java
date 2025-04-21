@@ -1,9 +1,7 @@
 package com.example.demo;
 
-import com.example.absensi.Database;
 import com.example.absensi.model.Absensi;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
+import com.mongodb.client.*;
 import org.bson.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,18 +36,19 @@ public class RekapAbsensiController {
         colMasuk.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamMasuk()));
         colPulang.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamPulang()));
 
-        loadDataAbsensiDariMongo();      // Ambil data dari Mongo
-        isiMenuBulan();                 // Isi bulan ke MenuButton
-        isiMenuTahunDariMongo();       // Isi tahun ke MenuButton
+        // Ambil data dulu baru isi tahun
+        loadDataAbsensiDariMongo();
+        isiMenuBulan();
+        isiMenuTahunDariMongo();
 
-        // Set default (hari ini)
+        // Set default bulan dan tahun
         LocalDate today = LocalDate.now();
         bulanDipilih = today.getMonthValue();
         tahunDipilih = today.getYear();
         menuBulan.setText(convertMonthToString(today.getMonth()));
         menuTahun.setText(String.valueOf(tahunDipilih));
 
-        // Filter langsung ditampilkan sesuai default
+        // Filter langsung agar data tampil
         onFilterClicked();
     }
 
@@ -58,17 +57,14 @@ public class RekapAbsensiController {
         MongoCollection<Document> collection = Database.getDatabase().getCollection("RekapAbsensi");
 
         FindIterable<Document> docs = collection.find();
+        System.out.println("Dokumen ditemukan: " + collection.countDocuments());
+
         for (Document doc : docs) {
+            System.out.println("Dokumen: " + doc.toJson());
+
             String nama = doc.getString("nama");
             String hari = doc.getString("hari");
-
-            LocalDate tanggal;
-            try {
-                tanggal = LocalDate.parse(doc.getString("tanggal"));
-            } catch (Exception e) {
-                continue;
-            }
-
+            LocalDate tanggal = LocalDate.parse(doc.getString("tanggal"));
             String jamMasuk = doc.getString("jam_masuk");
             String jamPulang = doc.getString("jam_pulang");
 
@@ -82,14 +78,13 @@ public class RekapAbsensiController {
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         };
-
         for (int i = 0; i < bulanIndo.length; i++) {
             final int bulanIndex = i + 1;
             MenuItem item = new MenuItem(bulanIndo[i]);
             item.setOnAction(e -> {
                 bulanDipilih = bulanIndex;
                 menuBulan.setText(bulanIndo[i]);
-                onFilterClicked();
+                onFilterClicked(); // tampilkan ulang saat ganti bulan
             });
             menuBulan.getItems().add(item);
         }
@@ -107,7 +102,7 @@ public class RekapAbsensiController {
             item.setOnAction(e -> {
                 tahunDipilih = tahun;
                 menuTahun.setText(String.valueOf(tahun));
-                onFilterClicked();
+                onFilterClicked(); // tampilkan ulang saat ganti tahun
             });
             menuTahun.getItems().add(item);
         }
@@ -119,7 +114,8 @@ public class RekapAbsensiController {
 
         ObservableList<Absensi> filtered = FXCollections.observableArrayList();
         for (Absensi abs : dataAbsensi) {
-            if (abs.getTanggal().getMonthValue() == bulanDipilih && abs.getTanggal().getYear() == tahunDipilih) {
+            if (abs.getTanggal().getMonthValue() == bulanDipilih &&
+                abs.getTanggal().getYear() == tahunDipilih) {
                 filtered.add(abs);
             }
         }
@@ -128,20 +124,19 @@ public class RekapAbsensiController {
     }
 
     private String convertMonthToString(Month month) {
-        switch (month) {
-            case JANUARY: return "Januari";
-            case FEBRUARY: return "Februari";
-            case MARCH: return "Maret";
-            case APRIL: return "April";
-            case MAY: return "Mei";
-            case JUNE: return "Juni";
-            case JULY: return "Juli";
-            case AUGUST: return "Agustus";
-            case SEPTEMBER: return "September";
-            case OCTOBER: return "Oktober";
-            case NOVEMBER: return "November";
-            case DECEMBER: return "Desember";
-            default: return "";
-        }
+        return switch (month) {
+            case JANUARY -> "Januari";
+            case FEBRUARY -> "Februari";
+            case MARCH -> "Maret";
+            case APRIL -> "April";
+            case MAY -> "Mei";
+            case JUNE -> "Juni";
+            case JULY -> "Juli";
+            case AUGUST -> "Agustus";
+            case SEPTEMBER -> "September";
+            case OCTOBER -> "Oktober";
+            case NOVEMBER -> "November";
+            case DECEMBER -> "Desember";
+        };
     }
 }
