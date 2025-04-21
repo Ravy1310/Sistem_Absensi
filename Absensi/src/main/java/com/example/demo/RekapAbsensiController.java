@@ -51,7 +51,7 @@ public class RekapAbsensiController {
 
     private void loadDataAbsensiDariMongo() {
         dataAbsensi.clear();
-        MongoCollection<Document> collection = Database.getDatabase().getCollection("absensi");
+        MongoCollection<Document> collection = Database.getDatabase().getCollection("RekapAbsensi");
 
         FindIterable<Document> docs = collection.find();
         for (Document doc : docs) {
