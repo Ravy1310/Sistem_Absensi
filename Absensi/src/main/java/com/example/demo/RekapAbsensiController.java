@@ -1,7 +1,9 @@
 package com.example.demo;
 
+import com.example.absensi.Database;
 import com.example.absensi.model.Absensi;
-import com.mongodb.client.*;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,17 +38,19 @@ public class RekapAbsensiController {
         colMasuk.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamMasuk()));
         colPulang.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamPulang()));
 
-        loadDataAbsensiDariMongo();
-        isiMenuBulan();
-        isiMenuTahunDariMongo();
+        loadDataAbsensiDariMongo();      // Ambil data dari Mongo
+        isiMenuBulan();                 // Isi bulan ke MenuButton
+        isiMenuTahunDariMongo();       // Isi tahun ke MenuButton
 
+        // Set default (hari ini)
         LocalDate today = LocalDate.now();
         bulanDipilih = today.getMonthValue();
         tahunDipilih = today.getYear();
         menuBulan.setText(convertMonthToString(today.getMonth()));
         menuTahun.setText(String.valueOf(tahunDipilih));
 
-        tableAbsensi.setItems(dataAbsensi);
+        // Filter langsung ditampilkan sesuai default
+        onFilterClicked();
     }
 
     private void loadDataAbsensiDariMongo() {
@@ -57,7 +61,14 @@ public class RekapAbsensiController {
         for (Document doc : docs) {
             String nama = doc.getString("nama");
             String hari = doc.getString("hari");
-            LocalDate tanggal = LocalDate.parse(doc.getString("tanggal")); // Format: YYYY-MM-DD
+
+            LocalDate tanggal;
+            try {
+                tanggal = LocalDate.parse(doc.getString("tanggal"));
+            } catch (Exception e) {
+                continue;
+            }
+
             String jamMasuk = doc.getString("jam_masuk");
             String jamPulang = doc.getString("jam_pulang");
 
@@ -71,12 +82,14 @@ public class RekapAbsensiController {
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         };
+
         for (int i = 0; i < bulanIndo.length; i++) {
             final int bulanIndex = i + 1;
             MenuItem item = new MenuItem(bulanIndo[i]);
             item.setOnAction(e -> {
                 bulanDipilih = bulanIndex;
                 menuBulan.setText(bulanIndo[i]);
+                onFilterClicked();
             });
             menuBulan.getItems().add(item);
         }
@@ -94,6 +107,7 @@ public class RekapAbsensiController {
             item.setOnAction(e -> {
                 tahunDipilih = tahun;
                 menuTahun.setText(String.valueOf(tahun));
+                onFilterClicked();
             });
             menuTahun.getItems().add(item);
         }
