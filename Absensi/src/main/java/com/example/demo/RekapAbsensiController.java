@@ -1,4 +1,4 @@
-package com.example.absensi;
+package com.example.demo;
 
 import com.example.absensi.model.Absensi;
 import com.mongodb.client.*;
@@ -21,10 +21,12 @@ public class RekapAbsensiController {
     @FXML private TableColumn<Absensi, String> colMasuk;
     @FXML private TableColumn<Absensi, String> colPulang;
 
-    @FXML private ComboBox<String> comboBulan;
-    @FXML private ComboBox<Integer> comboTahun;
+    @FXML private MenuButton menuBulan;
+    @FXML private MenuButton menuTahun;
 
     private final ObservableList<Absensi> dataAbsensi = FXCollections.observableArrayList();
+    private Integer tahunDipilih = null;
+    private Integer bulanDipilih = null;
 
     @FXML
     public void initialize() {
@@ -34,17 +36,15 @@ public class RekapAbsensiController {
         colMasuk.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamMasuk()));
         colPulang.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamPulang()));
 
-        comboBulan.setItems(FXCollections.observableArrayList(
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        ));
-
         loadDataAbsensiDariMongo();
-        isiComboTahunDariMongo();
+        isiMenuBulan();
+        isiMenuTahunDariMongo();
 
         LocalDate today = LocalDate.now();
-        comboBulan.setValue(convertMonthToString(today.getMonth()));
-        comboTahun.setValue(today.getYear());
+        bulanDipilih = today.getMonthValue();
+        tahunDipilih = today.getYear();
+        menuBulan.setText(convertMonthToString(today.getMonth()));
+        menuTahun.setText(String.valueOf(tahunDipilih));
 
         tableAbsensi.setItems(dataAbsensi);
     }
@@ -65,26 +65,47 @@ public class RekapAbsensiController {
         }
     }
 
-    private void isiComboTahunDariMongo() {
+    private void isiMenuBulan() {
+        menuBulan.getItems().clear();
+        String[] bulanIndo = {
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        };
+        for (int i = 0; i < bulanIndo.length; i++) {
+            final int bulanIndex = i + 1;
+            MenuItem item = new MenuItem(bulanIndo[i]);
+            item.setOnAction(e -> {
+                bulanDipilih = bulanIndex;
+                menuBulan.setText(bulanIndo[i]);
+            });
+            menuBulan.getItems().add(item);
+        }
+    }
+
+    private void isiMenuTahunDariMongo() {
         Set<Integer> tahunUnik = new TreeSet<>();
         for (Absensi abs : dataAbsensi) {
             tahunUnik.add(abs.getTanggal().getYear());
         }
-        comboTahun.setItems(FXCollections.observableArrayList(tahunUnik));
+
+        menuTahun.getItems().clear();
+        for (Integer tahun : tahunUnik) {
+            MenuItem item = new MenuItem(String.valueOf(tahun));
+            item.setOnAction(e -> {
+                tahunDipilih = tahun;
+                menuTahun.setText(String.valueOf(tahun));
+            });
+            menuTahun.getItems().add(item);
+        }
     }
 
     @FXML
     private void onFilterClicked() {
-        String selectedBulan = comboBulan.getValue();
-        Integer selectedTahun = comboTahun.getValue();
-
-        if (selectedBulan == null || selectedTahun == null) return;
-
-        int bulanIndex = comboBulan.getItems().indexOf(selectedBulan) + 1;
+        if (bulanDipilih == null || tahunDipilih == null) return;
 
         ObservableList<Absensi> filtered = FXCollections.observableArrayList();
         for (Absensi abs : dataAbsensi) {
-            if (abs.getTanggal().getMonthValue() == bulanIndex && abs.getTanggal().getYear() == selectedTahun) {
+            if (abs.getTanggal().getMonthValue() == bulanDipilih && abs.getTanggal().getYear() == tahunDipilih) {
                 filtered.add(abs);
             }
         }
