@@ -1,35 +1,28 @@
 package com.example.absensi;
 
 import com.example.absensi.model.Absensi;
+import com.mongodb.client.*;
+import org.bson.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 
 public class RekapAbsensiController {
 
-    @FXML
-    private TableView<Absensi> tableAbsensi;
-    @FXML
-    private TableColumn<Absensi, String> colNama;
-    @FXML
-    private TableColumn<Absensi, String> colHari;
-    @FXML
-    private TableColumn<Absensi, LocalDate> colTanggal;
-    @FXML
-    private TableColumn<Absensi, String> colMasuk;
-    @FXML
-    private TableColumn<Absensi, String> colPulang;
+    @FXML private TableView<Absensi> tableAbsensi;
+    @FXML private TableColumn<Absensi, String> colNama;
+    @FXML private TableColumn<Absensi, String> colHari;
+    @FXML private TableColumn<Absensi, LocalDate> colTanggal;
+    @FXML private TableColumn<Absensi, String> colMasuk;
+    @FXML private TableColumn<Absensi, String> colPulang;
 
-    @FXML
-    private ComboBox<String> comboBulan;
-    @FXML
-    private ComboBox<Integer> comboTahun;
+    @FXML private ComboBox<String> comboBulan;
+    @FXML private ComboBox<Integer> comboTahun;
 
     private final ObservableList<Absensi> dataAbsensi = FXCollections.observableArrayList();
 
@@ -41,59 +34,43 @@ public class RekapAbsensiController {
         colMasuk.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamMasuk()));
         colPulang.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamPulang()));
 
-        // Isi Combo Bulan statis
         comboBulan.setItems(FXCollections.observableArrayList(
             "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ));
 
-        
-        loadDataAbsensiDariDatabase();
-        isiComboTahunDariDatabase();
+        loadDataAbsensiDariMongo();
+        isiComboTahunDariMongo();
 
-       
         LocalDate today = LocalDate.now();
         comboBulan.setValue(convertMonthToString(today.getMonth()));
         comboTahun.setValue(today.getYear());
 
-       
         tableAbsensi.setItems(dataAbsensi);
     }
 
-    private void loadDataAbsensiDariDatabase() {
+    private void loadDataAbsensiDariMongo() {
         dataAbsensi.clear();
-        try (Connection conn = Database.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM absensi")) {
+        MongoCollection<Document> collection = Database.getDatabase().getCollection("absensi");
 
-            while (rs.next()) {
-                String nama = rs.getString("nama");
-                String hari = rs.getString("hari");
-                LocalDate tanggal = rs.getDate("tanggal").toLocalDate();
-                String jamMasuk = rs.getString("jam_masuk");
-                String jamPulang = rs.getString("jam_pulang");
+        FindIterable<Document> docs = collection.find();
+        for (Document doc : docs) {
+            String nama = doc.getString("nama");
+            String hari = doc.getString("hari");
+            LocalDate tanggal = LocalDate.parse(doc.getString("tanggal")); // Format: YYYY-MM-DD
+            String jamMasuk = doc.getString("jam_masuk");
+            String jamPulang = doc.getString("jam_pulang");
 
-                dataAbsensi.add(new Absensi(nama, hari, tanggal, jamMasuk, jamPulang));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            dataAbsensi.add(new Absensi(nama, hari, tanggal, jamMasuk, jamPulang));
         }
     }
 
-    private void isiComboTahunDariDatabase() {
+    private void isiComboTahunDariMongo() {
         Set<Integer> tahunUnik = new TreeSet<>();
-        try (Connection conn = Database.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT DISTINCT YEAR(tanggal) as tahun FROM absensi")) {
-
-            while (rs.next()) {
-                tahunUnik.add(rs.getInt("tahun"));
-            }
-
-            comboTahun.setItems(FXCollections.observableArrayList(tahunUnik));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        for (Absensi abs : dataAbsensi) {
+            tahunUnik.add(abs.getTanggal().getYear());
         }
+        comboTahun.setItems(FXCollections.observableArrayList(tahunUnik));
     }
 
     @FXML
