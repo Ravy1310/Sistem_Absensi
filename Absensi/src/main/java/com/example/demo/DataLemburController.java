@@ -18,7 +18,7 @@ public class DataLemburController {
     @FXML private Button calcButton;
 
     private final ObservableList<KaryawanLembur> lemburList = FXCollections.observableArrayList();
-    private final MongoDatabase database = MongoDBConnection.getDatabase(); // langsung konek MongoDB
+    private final MongoDatabase database = MongoDBConnection.getDatabase();
 
     @FXML
     public void initialize() {
@@ -28,8 +28,8 @@ public class DataLemburController {
 
         loadDataLembur();
 
-        searchField.setOnAction(e -> onSearch()); // enter untuk cari
-        calcButton.setOnAction(e -> onCalculation()); // klik tombol untuk hitung
+        searchField.setOnAction(e -> onSearch());
+        calcButton.setOnAction(e -> onCalculation());
     }
 
     private void loadDataLembur() {
@@ -40,7 +40,7 @@ public class DataLemburController {
             KaryawanLembur lembur = new KaryawanLembur(
                 no++,
                 doc.getString("nama"),
-                doc.getInteger("jamLembur")
+                doc.getInteger("jamLembur") != null ? doc.getInteger("jamLembur") : 0
             );
             lemburList.add(lembur);
         }
@@ -62,7 +62,7 @@ public class DataLemburController {
             KaryawanLembur lembur = new KaryawanLembur(
                 no++,
                 doc.getString("nama"),
-                doc.getInteger("jamLembur")
+                doc.getInteger("jamLembur") != null ? doc.getInteger("jamLembur") : 0
             );
             lemburList.add(lembur);
         }
@@ -72,14 +72,23 @@ public class DataLemburController {
     }
 
     private void onCalculation() {
+        if (lemburList.isEmpty()) {
+            showAlert("Data kosong", "Tidak ada data lembur untuk dihitung.");
+            return;
+        }
+
         int totalJam = lemburList.stream()
                 .mapToInt(KaryawanLembur::getJamLembur)
                 .sum();
 
+        showAlert("Perhitungan Jam Lembur", "Total jam lembur: " + totalJam + " jam");
+    }
+
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Perhitungan Jam Lembur");
+        alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText("Total jam lembur: " + totalJam + " jam");
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }
