@@ -1,63 +1,76 @@
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import model.KaryawanLembur;
+import org.bson.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import model.KaryawanLembur;
-import service.MongoDBService;
+import util.MongoDBConnection;
 
 public class DataLemburController {
 
-    @FXML
-    private TextField searchField;
-
-    @FXML
-    private TableView<KaryawanLembur> lemburTable;
-
-    @FXML
-    private TableColumn<KaryawanLembur, Integer> colNo;
-
-    @FXML
-    private TableColumn<KaryawanLembur, String> colNama;
-
-    @FXML
-    private TableColumn<KaryawanLembur, Integer> colJam;
-
-    @FXML
-    private Button calcButton;
+    @FXML private TextField searchField;
+    @FXML private TableView<KaryawanLembur> lemburTable;
+    @FXML private TableColumn<KaryawanLembur, Integer> colNo;
+    @FXML private TableColumn<KaryawanLembur, String> colNama;
+    @FXML private TableColumn<KaryawanLembur, Integer> colJam;
+    @FXML private Button calcButton;
 
     private final ObservableList<KaryawanLembur> lemburList = FXCollections.observableArrayList();
+    private final MongoDatabase database = MongoDBConnection.getDatabase(); // langsung konek MongoDB
 
     @FXML
     public void initialize() {
-        // Setup kolom
         colNo.setCellValueFactory(data -> data.getValue().noProperty().asObject());
         colNama.setCellValueFactory(data -> data.getValue().namaProperty());
         colJam.setCellValueFactory(data -> data.getValue().jamLemburProperty().asObject());
 
-        // Load data awal dari MongoDB
         loadDataLembur();
+
+        searchField.setOnAction(e -> onSearch()); // enter untuk cari
+        calcButton.setOnAction(e -> onCalculation()); // klik tombol untuk hitung
     }
 
     private void loadDataLembur() {
         lemburList.clear();
-        lemburList.addAll(MongoDBService.getAllDataLembur()); // asumsi service return List<KaryawanLembur>
+        MongoCollection<Document> collection = database.getCollection("Lembur");
+        int no = 1;
+        for (Document doc : collection.find()) {
+            KaryawanLembur lembur = new KaryawanLembur(
+                no++,
+                doc.getString("nama"),
+                doc.getInteger("jamLembur")
+            );
+            lemburList.add(lembur);
+        }
         lemburTable.setItems(lemburList);
     }
 
-    @FXML
     private void onSearch() {
-        String keyword = searchField.getText().toLowerCase();
+        String keyword = searchField.getText().trim().toLowerCase();
+        lemburList.clear();
+
         if (keyword.isEmpty()) {
             loadDataLembur();
             return;
         }
 
-        lemburList.clear();
-        lemburList.addAll(MongoDBService.searchLembur(keyword)); // pencarian berdasarkan nama/ID
+        MongoCollection<Document> collection = database.getCollection("Lembur");
+        int no = 1;
+        for (Document doc : collection.find(new Document("nama", new Document("$regex", keyword).append("$options", "i")))) {
+            KaryawanLembur lembur = new KaryawanLembur(
+                no++,
+                doc.getString("nama"),
+                doc.getInteger("jamLembur")
+            );
+            lemburList.add(lembur);
+        }
+
         lemburTable.setItems(lemburList);
+        searchField.clear();
     }
 
-    @FXML
     private void onCalculation() {
         int totalJam = lemburList.stream()
                 .mapToInt(KaryawanLembur::getJamLembur)
@@ -70,4 +83,3 @@ public class DataLemburController {
         alert.showAndWait();
     }
 }
-
