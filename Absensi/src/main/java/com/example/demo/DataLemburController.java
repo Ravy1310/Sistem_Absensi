@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.example.demo;
 
 import org.bson.Document;
@@ -15,17 +14,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-=======
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import model.KaryawanLembur;
-import org.bson.Document;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import util.MongoDBConnection;
->>>>>>> 4de601c9dc722e6e06c187a227d014c4cf71e3cd
 
 public class DataLemburController {
 
@@ -110,8 +98,4 @@ public class DataLemburController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 4de601c9dc722e6e06c187a227d014c4cf71e3cd
