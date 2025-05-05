@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@rekapabsensi.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@rekapabsensi.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.RekapAbsensiControl">
    <children>
       <Pane layoutX="-6.0" prefHeight="160.0" prefWidth="1065.0" styleClass="atas" stylesheets="@rekapabsensi.css">
          <children>
@@ -38,62 +35,34 @@
                   <Font name="System Bold" size="23.0" />
                </font>
             </Label>
-            <Button layoutX="773.0" layoutY="81.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="137.0" styleClass="ButtonTambah" stylesheets="@rekapabsensi.css" text="Tambah Baru" textFill="WHITE">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <effect>
-                  <DropShadow offsetY="3.0" />
-               </effect>
-            </Button>
-            <ImageView fitHeight="18.0" fitWidth="17.0" layoutX="788.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Icon/tambah.png" />
-               </image>
-            </ImageView>
-            <MenuButton layoutX="113.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" text="Tahun">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
-              </items>
-            </MenuButton>
-            <MenuButton layoutX="23.0" layoutY="170.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Bulan">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
-              </items>
-            </MenuButton>
-            <Button layoutX="799.0" layoutY="174.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" styleClass="buttoncari" stylesheets="@rekapabsensi.css">
-               <effect>
-                  <DropShadow offsetY="3.0" />
-               </effect></Button>
-            <TableView fx:id="tblAbsensi" layoutX="14.0" layoutY="222.0" prefHeight="262.0" prefWidth="938.0">
+            <Button layoutX="791.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" styleClass="buttoncari" stylesheets="@rekapabsensi.css" />
+            <TableView fx:id="tblAbsensi" layoutX="25.0" layoutY="156.0" prefHeight="328.0" prefWidth="906.0">
               <columns>
                 <TableColumn fx:id="colNo" prefWidth="32.666690826416016" text="No" />
                 <TableColumn fx:id="colNama" prefWidth="144.6666488647461" text="Nama Karyawan" />
                   <TableColumn fx:id="colHari" prefWidth="98.00001525878906" text="Hari" />
+                  <TableColumn fx:id="colShift" prefWidth="98.00001525878906" text="Shift" />
                   <TableColumn fx:id="colTanggal" prefWidth="132.0" text="Tanggal" />
                   <TableColumn fx:id="colWaktuMasuk" minWidth="6.00006103515625" prefWidth="112.66668701171875" text="Jam Masuk" />
                   <TableColumn fx:id="colWaktuKeluar" prefWidth="96.6666259765625" text="Jam Pulang" />
+                  <TableColumn fx:id="colStatus" prefWidth="96.6666259765625" text="Status" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Line endX="951.0" endY="1.52587890625E-5" layoutX="14.0" layoutY="138.0" startX="-14.000011444091797" startY="1.52587890625E-5" />
-            <ImageView fitHeight="18.0" fitWidth="27.0" layoutX="816.0" layoutY="178.0" pickOnBounds="true" preserveRatio="true">
+            <Line endX="951.0" endY="1.52587890625E-5" layoutX="14.0" layoutY="89.0" startX="-14.000011444091797" startY="1.52587890625E-5" />
+            <ImageView fitHeight="18.0" fitWidth="27.0" layoutX="808.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icon/cari.png" />
                </image>
             </ImageView>
-            <TextField layoutX="601.0" layoutY="173.0" prefHeight="32.0" prefWidth="172.0" promptText="Cari ID/Nama Karyawan" styleClass="txt-cari" stylesheets="@rekapabsensi.css">
+            <TextField layoutX="601.0" layoutY="43.0" prefHeight="32.0" prefWidth="172.0" promptText="Cari ID/Nama Karyawan" styleClass="txt-cari" stylesheets="@rekapabsensi.css">
                <font>
                   <Font name="Microsoft YaHei UI" size="12.0" />
                </font>
             </TextField>
+            <DatePicker fx:id="dtTanggal" layoutX="25.0" layoutY="106.0" prefHeight="32.0" prefWidth="266.0" styleClass="dp" stylesheets="@rekapabsensi.css" />
          </children>
       </Pane>
    </children>

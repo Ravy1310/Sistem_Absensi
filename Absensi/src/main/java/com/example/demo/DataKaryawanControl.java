@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -36,11 +37,13 @@ public class DataKaryawanControl {
     @FXML private DatePicker txttanggal;
     @FXML private TableView<Karyawan> tableKaryawan;
     @FXML private TableColumn<Karyawan, String> colNo, colNama, colEmail, colPosisi, colAlamat, colHP, colTanggalMasuk;
-   
+    
     private MongoDatabase database;
     private ObservableList<Karyawan> listKaryawan = FXCollections.observableArrayList();
 
-    public DataKaryawanControl() { database = MongoDBConnection.getDatabase(); }
+    public DataKaryawanControl() { 
+        database = MongoDBConnection.getDatabase(); 
+    }
 
     @FXML
     public void initialize() {
@@ -124,16 +127,29 @@ public class DataKaryawanControl {
     }
 
     private void HandleHapus() {
-        Karyawan selectedKaryawan = tableKaryawan.getSelectionModel().getSelectedItem();
-        if (selectedKaryawan != null) {
+    Karyawan selectedKaryawan = tableKaryawan.getSelectionModel().getSelectedItem();
+    if (selectedKaryawan != null) {
+        // Membuat dialog konfirmasi
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Konfirmasi Penghapusan");
+        confirmationAlert.setHeaderText("Yakin ingin menghapus data karyawan?");
+        confirmationAlert.setContentText("Nama: " + selectedKaryawan.getNama() + "\nRFID: " + selectedKaryawan.getRfid());
+        
+        // Menunggu pilihan pengguna
+        if (confirmationAlert.showAndWait().get() == ButtonType.OK) {
+            // Pengguna memilih OK
             database.getCollection("Karyawan").deleteOne(new Document("rfid", selectedKaryawan.getRfid()));
             listKaryawan.remove(selectedKaryawan);
             tableKaryawan.setItems(listKaryawan);
             showAlert("Data Karyawan berhasil dihapus!", Alert.AlertType.INFORMATION);
         } else {
-            showAlert("Pilih karyawan yang ingin dihapus!", Alert.AlertType.WARNING);
+            // Pengguna memilih CANCEL
+            showAlert("Penghapusan dibatalkan!", Alert.AlertType.INFORMATION);
         }
+    } else {
+        showAlert("Pilih karyawan yang ingin dihapus!", Alert.AlertType.WARNING);
     }
+}
 
     private void HandleEdit() {
         Karyawan selectedKaryawan = tableKaryawan.getSelectionModel().getSelectedItem();
@@ -177,7 +193,7 @@ public class DataKaryawanControl {
         });
     
         hide.play();
-       
+        
     }
 
     private void HandleSimpan() {
@@ -314,7 +330,6 @@ private void hideButtons(Button btnEdit, Button btnHapus) {
 
         karyawanCollection.updateOne(new Document("rfid", rfid), updatedData);
 
-       
         selectedKaryawan.setNama(nama);
         selectedKaryawan.setAlamat(alamat);
         selectedKaryawan.setNoHp(hp);

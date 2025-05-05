@@ -9,18 +9,106 @@
     -fx-border-style: solid;
     -fx-border-color: black;
     -fx-background-color: #FFFFFF;
+    -fx-background-radius: 25px;
 }
 .button-1{
-    -fx-background-color: #089A03;
-   -fx-background-radius: 20px;
+    -fx-border-radius: 15px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 15px;
+}
+.button-1:hover{
+    -fx-border-radius: 15px;
+    -fx-border-style: solid;
+    -fx-background-color: #087408 ;
+    -fx-background-radius: 15px;
 }
 .pane-3{
    -fx-background-color: #FFFFFF;
 }
-.txt-2{
+.buttontambah{
     -fx-border-radius: 5px;
     -fx-border-style: solid;
     -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+}
+.buttontambah:hover{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #087408 ;
+    -fx-background-radius: 5px;
+}
+.table-view {
+    -fx-background-color: transparent;
+        -fx-font-size: 14px;
+        -fx-font-family: "Segoe UI";
+}
+/* .table-row-cell {
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-width: 0px 2px 2px 0px;
+} */
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 5px;
 }
 
+/* .table-cell {
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-width: 0px 2px 0px 2px;
+} */
 
+.table-column {
+    -fx-border-color: rgb(14, 13, 13);
+    
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+   
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.panedalam{
+    -fx-background-color: #FFFFFF;
+ }
+ .panepane{
+    -fx-background-color: #ffffff; 
+    -fx-border-style: solid;
+    -fx-border-color: #000000;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+ }
+ .panepane1{
+    -fx-background-color:#F2f0f0;
+}
+.panepane2{
+    -fx-background-color: #ffffff;
+}
+.panepane3{
+    -fx-background-color: #F2f0f0;
+}
+.buttonbatal{
+    -fx-border-radius:5px;
+    -fx-border-style: solid;
+    -fx-background-color: #d20606;
+    -fx-background-radius: 5px;
+
+}
+.buttonbatal:hover{
+    -fx-border-radius:5px;
+    -fx-border-style: solid;
+    -fx-background-color: #a10505;
+    -fx-background-radius: 5px;
+}
+.buttonsimpan{
+    -fx-background-color: #089A03;
+}

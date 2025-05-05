@@ -99,6 +99,18 @@
                         <Font size="16.0" />
                      </font>
                   </Button>
+                  <Button fx:id="btnpengajuan" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="RA" stylesheets="@submenu.css" text="Pengajuan Lembur">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/icons8-submission-100.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <Button fx:id="btnperhitungan" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="pl" stylesheets="@submenu.css" text="Perhitungan lembur">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">

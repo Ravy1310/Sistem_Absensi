@@ -1,24 +1,29 @@
 .body {
-    -fx-background-color: #d6d6d6;
+    -fx-background-color: #b2afaf;
 }
 .atas {
-    -fx-background-color: #028D02;
+    -fx-background-color: #dfdcdc;
 }
-.dalam {
+.group1 {
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
 }
-.ButtonTambah {
-    -fx-background-color: #028D02;
-    -fx-background-radius: 20px;
+.buttontambah {
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
 }
 
-.ButtonTambah:hover {
-    -fx-background-color: #18b018;
-}
-.txt-cari {
-    -fx-background-color: #ffffff;
+.buttontambah:hover {
+    -fx-border-radius: 5px;
     -fx-border-style: solid;
+    -fx-background-color: #087408;
+    -fx-background-radius: 5px;
+}
+
+.txtfield1 {
+    -fx-background-radius: 20px;
     -fx-border-color: #000000;
     -fx-border-radius: 20px;
 }
@@ -75,28 +80,50 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
-.menu-button {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: rgb(52, 51, 51);
-    -fx-font-size: 14px;
+.panee{
+    -fx-background-color:#ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 15px;
+}
+.panee1{
+    -fx-background-color:#F2F0F0;
+}
+.panee2{
+    -fx-background-color:#ffffff;
+}
+.panee3{
+    -fx-background-color:#f2f0f0;
+}
+.btt{
     -fx-border-radius: 5px;
-    -fx-border-style: solid ;
+    -fx-border-style: solid;
+    -fx-background-color: #d20606;
+    -fx-background-radius: 5px;
 }
 
-.menu-button:hover {
-    -fx-background-color: #acacac;
+.btt:hover {
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #9f0b0b;
+    -fx-background-radius: 5px;
 }
 
-.menu-item {
-    -fx-background-color: rgb(255, 255, 255);
-    -fx-text-fill: rgb(52, 51, 51);
+.btt1{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
 }
 
-.menu-item:hover {
-    -fx-background-color: #acacac;
+.btt1:hover {
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #087408 ;
+    -fx-background-radius: 5px;
 }
 
-.dp {
+.cmb {
     -fx-background-color: #ffffff;
     -fx-background-radius: 5px;
     -fx-border-color: #000000;

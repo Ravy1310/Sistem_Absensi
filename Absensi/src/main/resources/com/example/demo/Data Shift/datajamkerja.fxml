@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -12,17 +13,17 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="pane" stylesheets="@datajamkerja.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.DataShiftControlle">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="pane" stylesheets="@datajamkerja.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.JamKerjaControl">
    <children>
       <Pane prefHeight="42.0" prefWidth="1059.0" styleClass="pane-2" stylesheets="@datajamkerja.css">
          <children>
-            <TextField layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="177.0" promptText="Cari ID/ Nama Karyawan" styleClass="txt" stylesheets="@datajamkerja.css">
+            <TextField fx:id="txtcari" layoutX="14.0" layoutY="8.0" prefHeight="27.0" prefWidth="177.0" promptText="Nama Shift" styleClass="txt" stylesheets="@datajamkerja.css">
                <font>
                   <Font name="Century Schoolbook" size="13.0" />
                </font>
             </TextField>
-            <Button layoutX="195.0" layoutY="8.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="53.0" styleClass="btncari" stylesheets="@datajamkerja.css" />
-            <ImageView fitHeight="19.0" fitWidth="41.0" layoutX="212.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="btncari" layoutX="195.0" layoutY="8.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="53.0" styleClass="btncari" stylesheets="@datajamkerja.css" />
+            <ImageView fx:id="imcari" fitHeight="19.0" fitWidth="41.0" layoutX="212.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icon/cari.png" />
                </image>
@@ -47,28 +48,38 @@
                <font>
                   <Font name="System Bold" size="12.666666984558105" />
                </font></Button>
-            <ImageView fitHeight="20.0" fitWidth="19.0" layoutX="926.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imtambah" fitHeight="20.0" fitWidth="19.0" layoutX="926.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icon/tambah.png" />
                </image>
             </ImageView>
-            <TableView layoutX="58.0" layoutY="93.0" prefHeight="263.0" prefWidth="846.0">
+            <TableView fx:id="tabeljam" layoutX="22.0" layoutY="93.0" prefHeight="152.0" prefWidth="956.0">
               <columns>
-                <TableColumn prefWidth="79.33333587646484" text="No" />
-                <TableColumn prefWidth="196.6666717529297" text="Waktu mulai" />
-                  <TableColumn prefWidth="175.33331298828125" text="Waktu Selesai" />
-                  <TableColumn prefWidth="200.0" text="Durasi" />
-                  <TableColumn prefWidth="197.33331298828125" text="Shift kerja" />
+                <TableColumn fx:id="colNo" prefWidth="79.33333587646484" text="No" />
+                  <TableColumn fx:id="colShift" prefWidth="197.33331298828125" text="Shift kerja" />
+                <TableColumn fx:id="colMulai" prefWidth="196.6666717529297" text="Waktu mulai" />
+                  <TableColumn fx:id="colSelesai" prefWidth="175.33331298828125" text="Waktu Selesai" />
+                  <TableColumn fx:id="colDurasi" prefWidth="200.0" text="Durasi" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <StackPane fx:id="popjam" layoutX="187.0" layoutY="-135.0" prefHeight="326.0" prefWidth="639.0" styleClass="stp" stylesheets="@datajamkerja.css">
+            <Button fx:id="btnhapus" layoutX="22.0" layoutY="263.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" styleClass="buttonbatal" stylesheets="@../Data%20Karyawan/datakaryawan.css" text="Hapus" textFill="#fdfdfd">
+               <font>
+                  <Font name="Century Schoolbook Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnedit" layoutX="142.0" layoutY="263.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" styleClass="buttonsimpan" stylesheets="@../Data%20Karyawan/datakaryawan.css" text="Edit" textFill="WHITE">
+               <font>
+                  <Font name="Century Schoolbook Bold" size="14.0" />
+               </font>
+            </Button>
+            <StackPane fx:id="popjam" layoutX="187.0" layoutY="-135.0" prefHeight="287.0" prefWidth="639.0" styleClass="stp" stylesheets="@datajamkerja.css">
                <children>
                   <Pane prefHeight="381.0" prefWidth="708.0" styleClass="pane-4" stylesheets="@datajamkerja.css">
                      <children>
-                        <Label layoutX="6.0" layoutY="22.0" styleClass="lb-4" stylesheets="@datajamkerja.css" text="Tambah Data Jam Kerja">
+                        <Label fx:id="lbpopup" layoutX="6.0" layoutY="22.0" styleClass="lb-4" stylesheets="@datajamkerja.css" text="Tambah Data Jam Kerja">
                            <font>
                               <Font name="Century Schoolbook Bold" size="13.0" />
                            </font>
@@ -81,7 +92,7 @@
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="141.0" layoutY="4.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
+                              <ComboBox fx:id="cbmulai" layoutX="144.0" layoutY="7.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
                            </children>
                         </Pane>
                         <Pane layoutX="2.0" layoutY="113.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-1" stylesheets="@datajamkerja.css">
@@ -91,35 +102,26 @@
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="143.0" layoutY="7.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
+                              <ComboBox fx:id="cbselesai" layoutX="144.0" layoutY="6.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
                            </children>
                         </Pane>
                         <Pane layoutX="3.0" layoutY="155.0" prefHeight="57.0" prefWidth="635.0" styleClass="pnn-2" stylesheets="@datajamkerja.css">
                            <children>
-                              <Label layoutX="14.0" layoutY="13.0" styleClass="lbb-2" stylesheets="@datajamkerja.css" text="Durasi">
+                              <Label layoutX="12.0" layoutY="18.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField layoutX="143.0" layoutY="6.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
+                              <TextField fx:id="txtshift" layoutX="144.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
                            </children>
                         </Pane>
-                        <Pane layoutX="2.0" layoutY="199.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-3" stylesheets="@datajamkerja.css">
-                           <children>
-                              <Label layoutX="14.0" layoutY="12.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
-                                 <font>
-                                    <Font name="Century Schoolbook" size="13.0" />
-                                 </font>
-                              </Label>
-                              <TextField layoutX="144.0" layoutY="8.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
-                           </children>
-                        </Pane>
-                        <Button fx:id="btnbatal" layoutX="55.0" layoutY="272.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="67.0" styleClass="btt-1" stylesheets="@datajamkerja.css" text="Batal" textFill="WHITE">
+                        <Pane layoutX="2.0" layoutY="199.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-3" stylesheets="@datajamkerja.css" />
+                        <Button fx:id="btnbatal" layoutX="36.0" layoutY="234.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="85.0" styleClass="btt-1" stylesheets="@datajamkerja.css" text="Batal" textFill="WHITE">
                            <font>
                               <Font name="Century Schoolbook Bold" size="13.0" />
                            </font>
                         </Button>
-                        <Button fx:id="btnsimpan" layoutX="517.0" layoutY="272.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="85.0" styleClass="btt-2" stylesheets="@datajamkerja.css" text="Simpan" textFill="#fffbfb">
+                        <Button fx:id="btnsimpan" layoutX="520.0" layoutY="234.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="85.0" styleClass="btt-2" stylesheets="@datajamkerja.css" text="Simpan" textFill="#fffbfb">
                            <font>
                               <Font name="Century Schoolbook Bold" size="13.0" />
                            </font>

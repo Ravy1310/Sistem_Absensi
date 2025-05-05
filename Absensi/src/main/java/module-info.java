@@ -7,6 +7,7 @@ module com.example.demo {
     requires java.xml;
     requires jbcrypt;
     requires javafx.base;
+    requires javafx.graphics;
 
 
     opens com.example.demo to javafx.fxml;

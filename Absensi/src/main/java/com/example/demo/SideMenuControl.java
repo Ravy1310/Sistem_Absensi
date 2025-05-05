@@ -27,7 +27,7 @@ public class SideMenuControl {
     @FXML
     private Button btnkelompok;
     @FXML
-    private Button btnrekap;
+    private Button btnrekap, btnpengajuan;
     @FXML
     private Button btnperhitungan;
 
@@ -44,6 +44,8 @@ public void initialize() {
     btndatajamkerja.setOnAction(event -> loadPage("/com/example/demo/Data Shift/datajamkerja.fxml"));
     btnkelompok.setOnAction(event -> loadPage("/com/example/demo/Data Kelompok/datakelompokkerja.fxml"));
     btnrekap.setOnAction(event -> loadPage("/com/example/demo/Rekap Absensi/rekapabsensi.fxml"));
+    btnpengajuan.setOnAction(event -> loadPage("/com/example/demo/Pengajuan Lembur/pengajuanlembur.fxml"));
+
     btnperhitungan.setOnAction(event -> loadPage("/com/example/demo/Data Lembur/datalembur.fxml"));
   
 }
