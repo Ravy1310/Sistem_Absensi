@@ -128,6 +128,16 @@
                   </Button>
                </children>
             </VBox>
+            <Button fx:id="btnLogOut" layoutY="574.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="199.0" styleClass="button-1" stylesheets="@submenu.css" text="  Log Out">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="37.0" fitWidth="38.0" layoutX="16.0" layoutY="584.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icon/icons8-log-out-100.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </left>

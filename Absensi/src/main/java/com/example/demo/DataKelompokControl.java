@@ -4,6 +4,8 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
+import static com.mongodb.client.model.Filters.all;
 import static com.mongodb.client.model.Filters.eq;
 
 import javafx.animation.FadeTransition;
@@ -202,7 +204,7 @@ public void initialize() {
     String hari = cmbhari.getValue();
     if (nama.isEmpty() || shift.isEmpty() || hari.isEmpty()) {
         // Tampilkan pesan kesalahan jika ada field yang kosong
-        System.out.println("Semua field harus diisi!");
+        showAlert("Semua field harus diisi!", Alert.AlertType.ERROR);
         return;
     }
 
@@ -211,7 +213,7 @@ public void initialize() {
 Document karyawan = karyawanCollection.find(eq("nama", nama)).first();
 
 
-   
+
     MongoCollection<Document> kelompokCollection = database.getCollection("KelompokKerja");
 
     if(karyawan != null) {

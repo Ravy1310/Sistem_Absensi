@@ -29,7 +29,7 @@ public class SideMenuControl {
     @FXML
     private Button btnrekap, btnpengajuan;
     @FXML
-    private Button btnperhitungan;
+    private Button btnperhitungan, btnLogOut;
 
    private MongoDatabase database;
 
@@ -47,7 +47,14 @@ public void initialize() {
     btnpengajuan.setOnAction(event -> loadPage("/com/example/demo/Pengajuan Lembur/pengajuanlembur.fxml"));
 
     btnperhitungan.setOnAction(event -> loadPage("/com/example/demo/Data Lembur/datalembur.fxml"));
-  
+    btnLogOut.setOnAction(event -> {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/demo/Login/login.fxml"));
+            mainPane.getChildren().setAll(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    });
 }
  private void loadPage(String fxmlPath) {
     try {

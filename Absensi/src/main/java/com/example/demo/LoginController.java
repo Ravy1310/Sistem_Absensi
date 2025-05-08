@@ -25,7 +25,7 @@ public class LoginController {
     @FXML
     private Button loginButton; // Harus sama dengan yang ada di FXML
     @FXML
-    private Button SignUpButton; // Harus sama dengan yang ada di FXML
+    private Button SignUpButton, btnLogOut; // Harus sama dengan yang ada di FXML
     @FXML
     private TextField UsernameField;
     @FXML
@@ -44,9 +44,11 @@ public class LoginController {
         loginButton.setOnAction(event ->handleLogin());
                 
                 SignUpButton.setOnAction(event -> loadPage("/com/example/demo/Login/SignUp.fxml"));
-                    
-                    }
+                btnLogOut.setOnAction(event -> {
+                    loadPage("/com/example/demo/absensi karyawan/absen.fxml");
+                    });
                 
+                }
     private void handleLogin() {
         String username = UsernameField.getText().trim();
         String password = PasswordField.getText().trim();

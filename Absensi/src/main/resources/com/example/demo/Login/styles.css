@@ -43,3 +43,11 @@
 .login-btn:hover {
     -fx-background-color: #34495e;
 }
+
+.logOut-btn {
+    -fx-background-color: transparent; 
+}
+
+.logOut-btn:hover {
+    -fx-background-color: #34495e;
+}

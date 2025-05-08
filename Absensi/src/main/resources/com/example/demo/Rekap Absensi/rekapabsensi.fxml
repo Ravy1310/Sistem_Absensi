@@ -35,8 +35,8 @@
                   <Font name="System Bold" size="23.0" />
                </font>
             </Label>
-            <Button layoutX="791.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" styleClass="buttoncari" stylesheets="@rekapabsensi.css" />
-            <TableView fx:id="tblAbsensi" layoutX="25.0" layoutY="156.0" prefHeight="328.0" prefWidth="906.0">
+            <Button fx:id="btnCari" layoutX="792.0" layoutY="45.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" styleClass="buttoncari" stylesheets="@rekapabsensi.css" />
+            <TableView fx:id="tblAbsensi" layoutX="17.0" layoutY="155.0" prefHeight="304.0" prefWidth="931.0">
               <columns>
                 <TableColumn fx:id="colNo" prefWidth="32.666690826416016" text="No" />
                 <TableColumn fx:id="colNama" prefWidth="144.6666488647461" text="Nama Karyawan" />
@@ -52,12 +52,12 @@
                </columnResizePolicy>
             </TableView>
             <Line endX="951.0" endY="1.52587890625E-5" layoutX="14.0" layoutY="89.0" startX="-14.000011444091797" startY="1.52587890625E-5" />
-            <ImageView fitHeight="18.0" fitWidth="27.0" layoutX="808.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imCari" fitHeight="18.0" fitWidth="27.0" layoutX="808.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icon/cari.png" />
                </image>
             </ImageView>
-            <TextField layoutX="601.0" layoutY="43.0" prefHeight="32.0" prefWidth="172.0" promptText="Cari ID/Nama Karyawan" styleClass="txt-cari" stylesheets="@rekapabsensi.css">
+            <TextField fx:id="txtCari" layoutX="601.0" layoutY="43.0" prefHeight="32.0" prefWidth="172.0" promptText="Cari ID/Nama Karyawan" styleClass="txt-cari" stylesheets="@rekapabsensi.css">
                <font>
                   <Font name="Microsoft YaHei UI" size="12.0" />
                </font>

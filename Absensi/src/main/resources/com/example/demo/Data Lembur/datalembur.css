@@ -8,8 +8,17 @@
    -fx-background-color: #FFFFFF;
 }
 .cari-2{
-    -fx-background-color: #089A03;
-   -fx-background-radius: 20px;
+    -fx-border-radius: 15px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 15px;
+}
+
+.cari-2:hover{
+    -fx-border-radius: 15px;
+    -fx-border-style: solid;
+    -fx-background-color: #087408;
+    -fx-background-radius: 15px;
 }
 .cari{
     -fx-border-radius: 25px;
@@ -21,4 +30,42 @@
     -fx-background-color: #089A03;
    -fx-background-radius: 20px;
 }
+.table-view {
+    -fx-background-color: transparent;
+        -fx-font-size: 14px;
+        -fx-font-family: "Segoe UI";
+}
+/* .table-row-cell {
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-width: 0px 2px 2px 0px;
+} */
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 5px;
+}
 
+/* .table-cell {
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-width: 0px 2px 0px 2px;
+} */
+
+.table-column {
+    -fx-border-color: rgb(14, 13, 13);
+    
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+   
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}

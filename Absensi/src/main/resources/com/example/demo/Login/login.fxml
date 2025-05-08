@@ -18,16 +18,26 @@
          <children>
             <Pane prefHeight="650.0" prefWidth="401.0" styleClass="sidebar" stylesheets="@styles.css">
                <children>
-                  <ImageView fitHeight="145.0" fitWidth="158.0" layoutX="128.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="145.0" fitWidth="158.0" layoutX="128.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/logo_bicopi-removebg-preview%20(1).png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="152.0" layoutY="456.0" text="BICOPI" textFill="#ffecec">
+                  <Label layoutX="152.0" layoutY="411.0" text="BICOPI" textFill="#ffecec">
                      <font>
                         <Font name="Century Schoolbook Bold" size="24.0" />
                      </font>
                   </Label>
+                  <Button fx:id="btnLogOut" layoutX="12.0" layoutY="8.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="81.0" styleClass="logOut-btn" stylesheets="@styles.css" text="  Back" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="12.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/icons8-back-96.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
             <Button fx:id="SignUpButton" layoutX="1112.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" styleClass="SignUp-btn" stylesheets="@styles.css" text="Create Account">
@@ -47,7 +57,7 @@
                   <Font name="Century Schoolbook" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="556.0" layoutY="181.0" text="Sign In">
+            <Label layoutX="556.0" layoutY="181.0" text="Log In">
                <font>
                   <Font name="Century Schoolbook Bold" size="36.0" />
                </font>

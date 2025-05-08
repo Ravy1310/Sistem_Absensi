@@ -87,12 +87,12 @@
                         <Line endX="530.3333129882812" endY="-7.62939453125E-6" layoutX="109.0" layoutY="48.0" startX="-109.0" startY="-7.62939453125E-6" />
                         <Pane layoutX="3.0" layoutY="71.0" prefHeight="57.0" prefWidth="635.0" styleClass="pnn" stylesheets="@datajamkerja.css">
                            <children>
-                              <Label layoutX="14.0" layoutY="12.0" styleClass="lbb" stylesheets="@datajamkerja.css" text="Waktu Mulai">
+                              <TextField fx:id="txtshift" layoutX="142.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
+                              <Label layoutX="14.0" layoutY="21.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cbmulai" layoutX="144.0" layoutY="7.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
                            </children>
                         </Pane>
                         <Pane layoutX="2.0" layoutY="113.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-1" stylesheets="@datajamkerja.css">
@@ -107,12 +107,12 @@
                         </Pane>
                         <Pane layoutX="3.0" layoutY="155.0" prefHeight="57.0" prefWidth="635.0" styleClass="pnn-2" stylesheets="@datajamkerja.css">
                            <children>
-                              <Label layoutX="12.0" layoutY="18.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
+                              <ComboBox fx:id="cbmulai" layoutX="143.0" layoutY="10.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
+                              <Label layoutX="14.0" layoutY="19.0" styleClass="lbb" stylesheets="@datajamkerja.css" text="Waktu Mulai">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtshift" layoutX="144.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
                            </children>
                         </Pane>
                         <Pane layoutX="2.0" layoutY="199.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-3" stylesheets="@datajamkerja.css" />
