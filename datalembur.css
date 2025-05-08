@@ -1,0 +1,112 @@
+.pane{
+ -fx-background-color: #B7B7B7;
+}
+.atas{
+    -fx-background-color: #E2E0E0;
+}
+.pane-bawah{
+   -fx-background-color: #FFFFFF;
+}
+.cari-2{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 20px;
+}
+.cari{
+    -fx-border-radius: 25px;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-background-color: #FFFFFF;
+}
+.calculation{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 20px;
+}
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-row-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 2px 2px;
+}
+
+.table-cell {
+    -fx-border-color: black;
+    -fx-border-width: 0px 2px 0px 2px;
+}
+
+.table-column {
+    -fx-border-color: rgb(255, 255, 255);
+    
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #272626; 
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent; 
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.stp{
+    -fx-background-color:#ffffff;
+}
+.panee{
+    -fx-background-color:#ffffff;
+}
+.stpp{
+    -fx-background-color:#ffffff;
+}
+.pn1{
+    /* background-color: ; */
+}
+.pnn1{
+    -fx-background-color:#F2F0F0;
+}
+.pnn2{
+    -fx-background-color:#ffffff;
+}
+.pnn3{
+    -fx-background-color:#f2f0f0;
+}
+.buttonn1{
+    -fx-background-color: #C60000;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+}
+.buttonn2{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 5px;
+
+}
+.btt-1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 25px;
+   -fx-border-radius: 25px;
+}
+.buttonn1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 5px;
+}
+.bttt1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 25px;
+   -fx-border-radius: 25px;
+}
+.btttt1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 5px;
+}
+.btttt2{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 5px;
+}
+.pnn-1{
+    -fx-background-color:#F2F0F0;
+}
