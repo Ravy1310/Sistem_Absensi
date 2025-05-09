@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@peforma.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="28.0" layoutY="21.0" stylesheets="@peforma.css" text="PERFORMA">
+         <font>
+            <Font name="Century Schoolbook" size="25.0" />
+         </font>
+      </Label>
+      <Line endX="957.0" endY="-7.62939453125E-6" layoutX="102.0" layoutY="67.0" startX="-100.0" />
+      <Label layoutX="55.0" layoutY="518.0" prefHeight="21.0" prefWidth="329.0" text="Kinerja baik, terus ditingkatkan untuk hasil optimal">
+         <font>
+            <Font name="Century Schoolbook" size="13.0" />
+         </font>
+      </Label>
+      <PieChart layoutX="102.0" layoutY="81.0" styleClass="piechart" />
+   </children>
+</Pane>
