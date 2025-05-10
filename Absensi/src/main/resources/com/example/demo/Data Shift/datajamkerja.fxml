@@ -88,7 +88,7 @@
                         <Pane layoutX="3.0" layoutY="71.0" prefHeight="57.0" prefWidth="635.0" styleClass="pnn" stylesheets="@datajamkerja.css">
                            <children>
                               <TextField fx:id="txtshift" layoutX="142.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" styleClass="txt" stylesheets="@datajamkerja.css" />
-                              <Label layoutX="14.0" layoutY="21.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
+                              <Label layoutX="14.0" layoutY="15.0" styleClass="lbb-3" stylesheets="@datajamkerja.css" text="Shift Kerja">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
@@ -97,18 +97,18 @@
                         </Pane>
                         <Pane layoutX="2.0" layoutY="113.0" prefHeight="42.0" prefWidth="635.0" styleClass="pnn-1" stylesheets="@datajamkerja.css">
                            <children>
-                              <Label layoutX="15.0" layoutY="15.0" prefWidth="704.0" styleClass="lbb-1" stylesheets="@datajamkerja.css" text="Waktu Selesai">
+                              <ComboBox fx:id="cbmulai" layoutX="144.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
+                              <Label layoutX="14.0" layoutY="14.0" styleClass="lbb" stylesheets="@datajamkerja.css" text="Waktu Mulai">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cbselesai" layoutX="144.0" layoutY="6.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
                            </children>
                         </Pane>
-                        <Pane layoutX="3.0" layoutY="155.0" prefHeight="57.0" prefWidth="635.0" styleClass="pnn-2" stylesheets="@datajamkerja.css">
+                        <Pane layoutX="3.0" layoutY="155.0" prefHeight="64.0" prefWidth="635.0" styleClass="pnn-2" stylesheets="@datajamkerja.css">
                            <children>
-                              <ComboBox fx:id="cbmulai" layoutX="143.0" layoutY="10.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
-                              <Label layoutX="14.0" layoutY="19.0" styleClass="lbb" stylesheets="@datajamkerja.css" text="Waktu Mulai">
+                              <ComboBox fx:id="cbselesai" layoutX="145.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
+                              <Label layoutX="14.0" layoutY="14.0" prefWidth="704.0" styleClass="lbb-1" stylesheets="@datajamkerja.css" text="Waktu Selesai">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>

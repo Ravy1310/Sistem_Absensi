@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -36,23 +36,22 @@
                </font>
             </Label>
             <Button fx:id="btnCari" layoutX="792.0" layoutY="45.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" styleClass="buttoncari" stylesheets="@rekapabsensi.css" />
-            <TableView fx:id="tblAbsensi" layoutX="17.0" layoutY="155.0" prefHeight="304.0" prefWidth="931.0">
+            <TableView fx:id="tblRekap" layoutX="17.0" layoutY="155.0" prefHeight="304.0" prefWidth="931.0">
               <columns>
                 <TableColumn fx:id="colNo" prefWidth="32.666690826416016" text="No" />
                 <TableColumn fx:id="colNama" prefWidth="144.6666488647461" text="Nama Karyawan" />
-                  <TableColumn fx:id="colHari" prefWidth="98.00001525878906" text="Hari" />
-                  <TableColumn fx:id="colShift" prefWidth="98.00001525878906" text="Shift" />
-                  <TableColumn fx:id="colTanggal" prefWidth="132.0" text="Tanggal" />
-                  <TableColumn fx:id="colWaktuMasuk" minWidth="6.00006103515625" prefWidth="112.66668701171875" text="Jam Masuk" />
-                  <TableColumn fx:id="colWaktuKeluar" prefWidth="96.6666259765625" text="Jam Pulang" />
-                  <TableColumn fx:id="colStatus" prefWidth="96.6666259765625" text="Status" />
+                  <TableColumn fx:id="colBulan" prefWidth="98.00001525878906" text="Bulan" />
+                  <TableColumn fx:id="colMasuk" prefWidth="98.00001525878906" text="Masuk" />
+                  <TableColumn fx:id="colIzin" prefWidth="132.0" text="Izin" />
+                  <TableColumn fx:id="colSakit" minWidth="6.00006103515625" prefWidth="112.66668701171875" text="Sakit" />
+                  <TableColumn fx:id="colAlfa" prefWidth="96.6666259765625" text="Alfa" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
             <Line endX="951.0" endY="1.52587890625E-5" layoutX="14.0" layoutY="89.0" startX="-14.000011444091797" startY="1.52587890625E-5" />
-            <ImageView fx:id="imCari" fitHeight="18.0" fitWidth="27.0" layoutX="808.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imCari" fitHeight="18.0" fitWidth="27.0" layoutX="810.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icon/cari.png" />
                </image>
@@ -62,7 +61,8 @@
                   <Font name="Microsoft YaHei UI" size="12.0" />
                </font>
             </TextField>
-            <DatePicker fx:id="dtTanggal" layoutX="25.0" layoutY="106.0" prefHeight="32.0" prefWidth="266.0" styleClass="dp" stylesheets="@rekapabsensi.css" />
+            <ComboBox fx:id="cbBulan" layoutX="32.0" layoutY="109.0" prefHeight="32.0" prefWidth="100.0" promptText="Bulan" styleClass="dp" stylesheets="@rekapabsensi.css" />
+            <ComboBox fx:id="cbTahun" layoutX="153.0" layoutY="109.0" prefHeight="32.0" prefWidth="127.0" promptText="Tahun" styleClass="dp" stylesheets="@rekapabsensi.css" />
          </children>
       </Pane>
    </children>

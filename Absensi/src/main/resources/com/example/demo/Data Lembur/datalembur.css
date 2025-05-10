@@ -13,13 +13,13 @@
     -fx-background-color: #089A03 ;
     -fx-background-radius: 15px;
 }
-
 .cari-2:hover{
     -fx-border-radius: 15px;
     -fx-border-style: solid;
-    -fx-background-color: #087408;
+    -fx-background-color: #087408 ;
     -fx-background-radius: 15px;
 }
+
 .cari{
     -fx-border-radius: 25px;
     -fx-border-style: solid;
@@ -68,4 +68,94 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
+}
+.stp{
+    -fx-background-color:#ffffff;
+}
+.panee{
+    -fx-background-color:#ffffff;
+}
+.stpp{
+    -fx-background-color:#ffffff;
+}
+.pn1{
+    /* background-color: ; */
+}
+.pnn1{
+    -fx-background-color:#F2F0F0;
+}
+.pnn2{
+    -fx-background-color:#ffffff;
+}
+.pnn3{
+    -fx-background-color:#f2f0f0;
+}
+.buttonn1{
+    -fx-background-color: #C60000;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+}
+.buttonn2{
+    -fx-background-color: #089A03;
+   -fx-background-radius: 5px;
+
+}
+.btt-1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 25px;
+   -fx-border-radius: 25px;
+}
+.buttonn1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 5px;
+}
+.bttt1{
+    -fx-background-color: #C60000;
+   -fx-background-radius: 25px;
+   -fx-border-radius: 25px;
+}
+.btttt1{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #d20606;
+    -fx-background-radius: 5px;
+}
+.btttt1:hover{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #9f0b0b;
+    -fx-background-radius: 5px;
+}
+.btttt2{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+}
+.btttt2:hover{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #087408 ;
+    -fx-background-radius: 5px;
+}
+
+.pnn-1{
+    -fx-background-color:#F2F0F0;
+}
+
+.pane-4 {
+    -fx-background-color:#ffffff;
+    -fx-background-radius: 15px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 15px;
+}
+.stp{
+    -fx-background-radius: 15px;
+}
+
+.cm{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
 }

@@ -126,7 +126,7 @@ public class DataKaryawanControl {
         txtcari.clear(); 
     }
 
-    private void HandleHapus() {
+   private void HandleHapus() {
     Karyawan selectedKaryawan = tableKaryawan.getSelectionModel().getSelectedItem();
     if (selectedKaryawan != null) {
         // Membuat dialog konfirmasi
@@ -134,22 +134,39 @@ public class DataKaryawanControl {
         confirmationAlert.setTitle("Konfirmasi Penghapusan");
         confirmationAlert.setHeaderText("Yakin ingin menghapus data karyawan?");
         confirmationAlert.setContentText("Nama: " + selectedKaryawan.getNama() + "\nRFID: " + selectedKaryawan.getRfid());
-        
+
         // Menunggu pilihan pengguna
         if (confirmationAlert.showAndWait().get() == ButtonType.OK) {
-            // Pengguna memilih OK
-            database.getCollection("Karyawan").deleteOne(new Document("rfid", selectedKaryawan.getRfid()));
+            String rfid = selectedKaryawan.getRfid();
+
+            // Hapus dari koleksi "Karyawan"
+            database.getCollection("Karyawan").deleteOne(new Document("rfid", rfid));
+
+            // Hapus dari koleksi "Absensi"
+            database.getCollection("Absensi").deleteMany(new Document("rfid", rfid));
+
+            // Hapus dari koleksi "KelompokKerja"
+            database.getCollection("KelompokKerja").deleteMany(new Document("rfid", rfid));
+
+            // Hapus dari koleksi "PengajuanLembur"
+            database.getCollection("PengajuanLembur").deleteMany(new Document("rfid", rfid));
+
+            // Hapus dari koleksi "rekapAbsensi"
+            database.getCollection("rekapAbsensi").deleteMany(new Document("rfid", rfid));
+
+            // Hapus dari list dan refresh table
             listKaryawan.remove(selectedKaryawan);
             tableKaryawan.setItems(listKaryawan);
-            showAlert("Data Karyawan berhasil dihapus!", Alert.AlertType.INFORMATION);
+
+            showAlert("Data Karyawan dan semua data terkait berhasil dihapus!", Alert.AlertType.INFORMATION);
         } else {
-            // Pengguna memilih CANCEL
             showAlert("Penghapusan dibatalkan!", Alert.AlertType.INFORMATION);
         }
     } else {
         showAlert("Pilih karyawan yang ingin dihapus!", Alert.AlertType.WARNING);
     }
 }
+
 
     private void HandleEdit() {
         Karyawan selectedKaryawan = tableKaryawan.getSelectionModel().getSelectedItem();

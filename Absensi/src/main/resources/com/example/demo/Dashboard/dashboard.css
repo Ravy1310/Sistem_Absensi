@@ -25,28 +25,82 @@
 .buttonmenu3 {
     -fx-background-radius: 20px;
 }
+.tabledashboard {
+    -fx-background-color: #ffffff;
+}
+.btt{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+}
+.stp{
+    -fx-background-color:#ffffff;
+}
+.stpp{
+    -fx-background-color:#ffffff;
+}
+.pn3{
+    -fx-background-color:#F2F0F0;
+}
+.pn5{
+    background-color:#f2f0f0;
+}
+.pnnn{
+    -fx-background-color:#f2f0f0;
+}
+.bttt{
+    -fx-border-radius:5px;
+    -fx-border-style: solid;
+    -fx-background-color: #C60000;
+    -fx-background-radius: 5px;
+}
 
+.bttt1{
+    -fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+}
+.pnnn1{
+    -fx-background-color:#ffffff;
+}
+.pnnn2{
+    -fx-background-color:#f2f0f0;
+}
+.btttt{
+    fx-border-radius: 5px;
+    -fx-border-style: solid;
+    -fx-background-color: #089A03 ;
+    -fx-background-radius: 5px;
+
+}
 .table-view {
     -fx-background-color: transparent;
+        -fx-font-size: 14px;
+        -fx-font-family: "Segoe UI";
 }
-.table-row-cell {
-    -fx-border-color: black;
-    -fx-border-width: 0px 2px 2px 2px;
+/* .table-row-cell {
+    -fx-border-color: rgb(0, 0, 0);
+    -fx-border-width: 0px 2px 2px 0px;
+} */
+.table-view .table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 5px;
 }
 
-.table-cell {
-    -fx-border-color: black;
+/* .table-cell {
+    -fx-border-color: rgb(0, 0, 0);
     -fx-border-width: 0px 2px 0px 2px;
-}
+} */
 
 .table-column {
-    -fx-border-color: rgb(255, 255, 255);
+    -fx-border-color: rgb(14, 13, 13);
+    
     
 }
 
 .table-view .column-header-background {
     -fx-background-color: #272626; 
-    -fx-background-radius: 10px 10px 0 0;
+   
 }
 
 .table-view .column-header {
@@ -58,10 +112,24 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
+.pn2 {
+    -fx-background-color:#ffffff;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
 
-/* .table-view:focused {
-    -fx-border-color: #3498db;
-    -fx-background-color: #f5f5f5; 
-    -fx-border-width: 2px;
-} */
+.txt{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20px;
+}
 
+.cmb {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+}

@@ -22,7 +22,7 @@
          <children>
             <TextField fx:id="txtCari" layoutX="28.0" layoutY="18.0" prefHeight="30.0" prefWidth="170.0" promptText="Cari Nama Karyawan" styleClass="txtfield1" stylesheets="@pengajuanlembur.css" />
             <Button fx:id="btnCari" layoutX="205.0" layoutY="18.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="55.0" styleClass="buttoncari" stylesheets="@pengajuanlembur.css" />
-            <ImageView fx:id="imCari" fitHeight="23.0" fitWidth="40.0" layoutX="221.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imCari" fitHeight="21.0" fitWidth="23.0" layoutX="221.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icon/cari.png" />
                </image>

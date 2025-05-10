@@ -3,6 +3,7 @@ package com.example.demo;
 import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,12 +33,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AbsenController implements Initializable {
@@ -70,6 +73,7 @@ private TableColumn<RekapAbsensi, String> colStatus;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     
+       
         colNo.setCellFactory(tc -> new TableCell<>() {
             @Override protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -109,7 +113,7 @@ private void loadAbsen() {
     ObservableList<RekapAbsensi> listAbsensi = FXCollections.observableArrayList();
     
     // Ambil data dari koleksi "rekapAbsensi"
-    MongoCollection<Document> rekapAbsensiCollection = database.getCollection("rekapAbsensi");
+    MongoCollection<Document> rekapAbsensiCollection = database.getCollection("Absensi");
 
     // Mendapatkan tanggal hari ini
     LocalDate today = LocalDate.now();
@@ -125,6 +129,7 @@ private void loadAbsen() {
         String status = doc.getString("status");
 
         if(jenis.equals("keluar")) {
+            jam = doc.getString("waktuKeluar");
             status = "keluar";
         }
 
@@ -144,14 +149,15 @@ private void loadAbsen() {
     // Set listAbsensi ke tabel Anda, misalnya melalui TableView
     tabelAbsensi.setItems(listAbsensi);
 }
+
 private void simpanKeRekapAbsensi(String rfid) {
     try {
         MongoCollection<Document> jamKerjaCollection = database.getCollection("JamKerja");
         MongoCollection<Document> kelompokKerjaCollection = database.getCollection("KelompokKerja");
-        MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
-        MongoCollection<Document> pengajuanLemburCollection = database.getCollection("pengajuanlembur");
+        MongoCollection<Document> rekapCollection = database.getCollection("Absensi");
+        MongoCollection<Document> pengajuanLemburCollection = database.getCollection("PengajuanLembur");
 
-        // Ambil semua shift yang ada di koleksi jamkerja
+        // Ambil semua shift
         List<Document> shifts = jamKerjaCollection.find().into(new ArrayList<>());
 
         if (shifts.isEmpty()) {
@@ -159,30 +165,48 @@ private void simpanKeRekapAbsensi(String rfid) {
             return;
         }
 
-        // Mendapatkan waktu sekarang
+        // Waktu sekarang
         LocalTime sekarang = LocalTime.now();
+        String tanggalSekarang = LocalDate.now().toString();
+
+        // Cek apakah sudah pernah absen masuk
+        Document existingAbsensi = rekapCollection.find(and(eq("rfid", rfid), eq("tanggal", tanggalSekarang))).first();
+
         String shiftAktual = null;
         LocalTime waktuMulaiShift = null;
         LocalTime waktuSelesaiShift = null;
 
-        // Tentukan shift yang sesuai dengan waktu sekarang berdasarkan data shift yang ada di database
-        for (Document shift : shifts) {
-            String shiftName = shift.getString("shift");
-            LocalTime mulai = LocalTime.parse(shift.getString("waktuMulai"));
-            LocalTime selesai = LocalTime.parse(shift.getString("waktuSelesai"));
+        if (existingAbsensi != null && "masuk".equals(existingAbsensi.getString("jenisAbsen"))) {
+            // Gunakan shift dari absensi masuk
+            shiftAktual = existingAbsensi.getString("shift");
 
-            // Pengecekan apakah waktu sekarang masuk dalam range waktu shift
-            if ((sekarang.isAfter(mulai) || sekarang.equals(mulai)) && sekarang.isBefore(selesai)) {
-                shiftAktual = shiftName;
-                waktuMulaiShift = mulai;
-                waktuSelesaiShift = selesai;
-                break;  // Jika ditemukan shift yang cocok, keluar dari loop
+            Document shift = jamKerjaCollection.find(eq("shift", shiftAktual)).first();
+            if (shift != null) {
+                waktuMulaiShift = LocalTime.parse(shift.getString("waktuMulai"));
+                waktuSelesaiShift = LocalTime.parse(shift.getString("waktuSelesai"));
+            } else {
+                System.out.println("Shift tidak ditemukan di jamKerja.");
+                return;
             }
-        }
+        } else {
+            // Cari shift berdasarkan waktu sekarang (untuk absen masuk)
+            for (Document shift : shifts) {
+                String shiftName = shift.getString("shift");
+                LocalTime mulai = LocalTime.parse(shift.getString("waktuMulai"));
+                LocalTime selesai = LocalTime.parse(shift.getString("waktuSelesai"));
 
-        if (shiftAktual == null || waktuMulaiShift == null) {
-            System.out.println("Tidak ada shift yang cocok dengan waktu sekarang.");
-            return;
+                if ((sekarang.isAfter(mulai) || sekarang.equals(mulai)) && sekarang.isBefore(selesai)) {
+                    shiftAktual = shiftName;
+                    waktuMulaiShift = mulai;
+                    waktuSelesaiShift = selesai;
+                    break;
+                }
+            }
+
+            if (shiftAktual == null || waktuMulaiShift == null) {
+                System.out.println("Tidak ada shift yang cocok dengan waktu sekarang.");
+                return;
+            }
         }
 
         // Cari data karyawan sesuai shift dan RFID
@@ -190,74 +214,77 @@ private void simpanKeRekapAbsensi(String rfid) {
         Document karyawan = kelompokKerjaCollection.find(filter).first();
 
         if (karyawan != null) {
-            // Cari apakah sudah ada absen masuk untuk RFID dan tanggal yang sama
-            String tanggalSekarang = java.time.LocalDate.now().toString();
-            Document existingAbsensi = rekapCollection.find(and(eq("rfid", rfid), eq("tanggal", tanggalSekarang))).first();
-
             if (existingAbsensi == null) {
-                // Jika tidak ada, simpan sebagai "masuk"
-                long diffInMinutes = java.time.Duration.between(waktuMulaiShift, sekarang).toMinutes();
+                // Absen masuk
+                long diffInMinutes = Duration.between(waktuMulaiShift, sekarang).toMinutes();
                 String statusAbsen = (diffInMinutes <= 30) ? "tepat waktu" : "terlambat";
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                 String waktuFormatted = LocalDateTime.now().format(formatter);
 
                 String idAbsensi = UUID.randomUUID().toString();
-
-                // Mendapatkan nama hari dalam Bahasa Indonesia
                 String hariDalamBahasaIndonesia = getHariDalamBahasaIndonesia(LocalDate.now().getDayOfWeek());
 
-                Document absenMasuk = new Document("id_absensi", idAbsensi) // Menyimpan id_absensi
+                Document absenMasuk = new Document("id_absensi", idAbsensi)
                         .append("nama", karyawan.getString("nama"))
                         .append("rfid", rfid)
                         .append("shift", shiftAktual)
-                        .append("tanggal", tanggalSekarang)  // Menyimpan tanggal
-                        .append("hari", hariDalamBahasaIndonesia) // Menyimpan hari dalam Bahasa Indonesia
-                        .append("waktu", waktuFormatted)      // Menyimpan waktu
+                        .append("tanggal", tanggalSekarang)
+                        .append("hari", hariDalamBahasaIndonesia)
+                        .append("waktu", waktuFormatted)
                         .append("jenisAbsen", "masuk")
-                        .append("status", statusAbsen);       // Menyimpan status absen
+                        .append("status", statusAbsen);
 
                 rekapCollection.insertOne(absenMasuk);
                 System.out.println("Absen masuk berhasil disimpan untuk shift: " + shiftAktual + " pada tanggal: " + tanggalSekarang + " dengan status: " + statusAbsen);
-            } else {
-                // Jika sudah ada, cek apakah ini absen keluar
-                if ("masuk".equals(existingAbsensi.getString("jenisAbsen"))) {
-                    // Cek apakah ada pengajuan lembur untuk RFID dan tanggal ini
-                    Document pengajuanLembur = pengajuanLemburCollection.find(
-                            and(eq("rfid", rfid), eq("tanggal", tanggalSekarang))
-                    ).first();
+            } else if ("masuk".equals(existingAbsensi.getString("jenisAbsen"))) {
+                // Cek pengajuan lembur
+                Document pengajuanLembur = pengajuanLemburCollection.find(
+                        and(eq("rfid", rfid), eq("tanggal", tanggalSekarang))
+                ).first();
 
-                    if (pengajuanLembur != null) {
-                        // Jika ada pengajuan lembur, ambil durasi lembur
-                        int durasiLembur = pengajuanLembur.getInteger("durasi", 0);
-                        
-                        // Hitung waktu minimal untuk absen keluar
-                        LocalTime waktuSelesaiNormal = waktuSelesaiShift;
-                        LocalTime waktuMinimalKeluar = waktuSelesaiNormal.plusMinutes(durasiLembur);
-                        
-                        // Jika waktu sekarang masih sebelum waktu minimal keluar
-                        if (sekarang.isBefore(waktuMinimalKeluar)) {
-                            System.out.println("Belum bisa absen keluar. Harus menunggu sampai: " + waktuMinimalKeluar);
-                            return;
-                        }
-                    }
+                LocalTime waktuMinimalKeluar = waktuSelesaiShift;
 
-                    // Jika tidak ada pengajuan lembur atau sudah melewati waktu minimal
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                    String waktuFormatted = LocalDateTime.now().format(formatter);
-
-                    rekapCollection.updateOne(
-                            and(eq("rfid", rfid), eq("tanggal", tanggalSekarang)),
-                            new Document("$set", new Document("jenisAbsen", "keluar")
-                                    .append("waktuKeluar", waktuFormatted))
-                    );
-                    System.out.println("Absen keluar berhasil disimpan untuk shift: " + shiftAktual + " pada tanggal: " + tanggalSekarang);
-                } else {
-                    System.out.println("Anda sudah melakukan absen keluar hari ini.");
+                if (pengajuanLembur != null) {
+                    String durasiLembur = pengajuanLembur.getString("durasi");
+                    int durasiLemburInt = Integer.parseInt(durasiLembur);
+                    waktuMinimalKeluar = waktuSelesaiShift.plusHours(durasiLemburInt);
                 }
+
+                if (sekarang.isBefore(waktuMinimalKeluar)) {
+               Platform.runLater(() -> {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Peringatan");
+        alert.setHeaderText(null);
+        alert.setContentText("Belum waktunya keluar");
+        alert.getButtonTypes().setAll(ButtonType.OK);
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        alert.show();
+         alert.setOnCloseRequest(event -> {
+            System.out.println("Alert ditutup");
+        });
+
+
+
+        // Letakkan return logic di sini jika perlu menghentikan proses lebih lanjut
+        // Misal: menonaktifkan tombol, atau sekadar tidak melanjutkan
+    });
+    return; // <-
+                }
+
+                // Simpan absen keluar
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                String waktuFormatted = LocalDateTime.now().format(formatter);
+
+                rekapCollection.updateOne(
+                        and(eq("rfid", rfid), eq("tanggal", tanggalSekarang)),
+                        new Document("$set", new Document("jenisAbsen", "keluar")
+                                .append("waktuKeluar", waktuFormatted))
+                );
+
+                System.out.println("Absen keluar berhasil disimpan untuk shift: " + shiftAktual + " pada tanggal: " + tanggalSekarang);
             }
-        } else {
-            System.out.println("RFID ditemukan, tetapi tidak sesuai shift saat ini.");
         }
 
     } catch (Exception e) {
@@ -315,6 +342,18 @@ private String getHariDalamBahasaIndonesia(DayOfWeek dayOfWeek) {
             e.printStackTrace();
         }
     }
+
+    private void showAlert(String message, AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle("Notification");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.getButtonTypes().setAll(ButtonType.OK);
+        alert.showAndWait();
+    }
+    
+
     
 
     
