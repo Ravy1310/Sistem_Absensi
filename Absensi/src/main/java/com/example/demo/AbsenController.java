@@ -142,20 +142,33 @@ private void loadAbsen() {
             status = "keluar";
         }
 
+        
+String hariSekarang = today.getDayOfWeek().name().toLowerCase(); // "monday", "tuesday", dll.
+
+String hariIndonesia = getHariDalamBahasaIndonesia(today.getDayOfWeek()); // Konversi ke format yang digunakan di database
         // Memeriksa apakah data memiliki tanggal yang sama dengan hari ini
         if (tanggal.equals(todayString)) {
-            // Ambil nama dan shift berdasarkan RFID dari koleksi "KelompokKerja"
-            MongoCollection<Document> kelompokKerjaCollection = database.getCollection("KelompokKerja");
-            Document kelompokDoc = kelompokKerjaCollection.find(new Document("rfid", rfid)).first();
-            String nama = kelompokDoc != null ? kelompokDoc.getString("nama") : "Nama Tidak Ditemukan";
-           
+          MongoCollection<Document> kelompokKerjaCollection = database.getCollection("KelompokKerja");
 
+          // Konversi ke format yang digunakan di database
+// Filter berdasarkan RFID dan hari
+Document filter = new Document("rfid", rfid).append("hari", hariIndonesia);
+Document kelompokDoc = kelompokKerjaCollection.find(filter).first();
+
+String nama = kelompokDoc != null ? kelompokDoc.getString("nama") : "Nama Tidak Ditemukan";
+String shiftFromKelompok = kelompokDoc != null ? kelompokDoc.getString("shift") : "Shift Tidak Ditemukan";
+
+if (kelompokDoc != null) {
+    System.out.println("Shift ditemukan untuk RFID " + rfid + " pada hari " + hariIndonesia + ": " + shiftFromKelompok);
+} else {
+    System.out.println("Data tidak ditemukan untuk RFID " + rfid + " pada hari " + hariIndonesia);
+}
 if (kelompokDoc != null) {
     System.out.println("Shift ditemukan untuk RFID " + rfid );
 }
 
             // Masukkan data ke dalam listAbsensi
-            listAbsensi.add(new RekapAbsensi(nama, shift, tanggal,null, jam, null, null, status, null, jenis));
+            listAbsensi.add(new RekapAbsensi(nama, shiftFromKelompok, tanggal,null, jam, null, null, status, null, jenis));
         }
     }
 
@@ -169,6 +182,9 @@ private void simpanKeRekapAbsensi(String rfid) {
         MongoCollection<Document> kelompokKerjaCollection = database.getCollection("KelompokKerja");
         MongoCollection<Document> rekapCollection = database.getCollection("Absensi");
         MongoCollection<Document> pengajuanLemburCollection = database.getCollection("PengajuanLembur");
+
+        // Mendapatkan tanggal hari ini
+        LocalDate today = LocalDate.now();
 
         // Ambil semua shift
         List<Document> shifts = jamKerjaCollection.find().into(new ArrayList<>());
@@ -221,9 +237,14 @@ private void simpanKeRekapAbsensi(String rfid) {
                 return;
             }
         }
+String hariSekarang = today.getDayOfWeek().name().toLowerCase(); // "monday", "tuesday", dll.
+
+
+String hariIndonesia = getHariDalamBahasaIndonesia(today.getDayOfWeek()); // Konversi ke format yang digunakan di database
+
 
         // Cari data karyawan sesuai shift dan RFID
-        Bson filter = and(eq("rfid", rfid), eq("shift", shiftAktual));
+        Bson filter = and(eq("rfid", rfid), eq("shift", shiftAktual), eq("hari", hariIndonesia ));
         Document karyawan = kelompokKerjaCollection.find(filter).first();
 
         if (karyawan != null) {
