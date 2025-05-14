@@ -42,6 +42,7 @@
                 <TableColumn fx:id="colNama" prefWidth="144.6666488647461" text="Nama Karyawan" />
                   <TableColumn fx:id="colBulan" prefWidth="98.00001525878906" text="Bulan" />
                   <TableColumn fx:id="colMasuk" prefWidth="98.00001525878906" text="Masuk" />
+                  <TableColumn fx:id="colDurasi" prefWidth="98.00001525878906" text="Durasi" />
                   <TableColumn fx:id="colIzin" prefWidth="132.0" text="Izin" />
                   <TableColumn fx:id="colSakit" minWidth="6.00006103515625" prefWidth="112.66668701171875" text="Sakit" />
                   <TableColumn fx:id="colAlfa" prefWidth="96.6666259765625" text="Alfa" />

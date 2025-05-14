@@ -2,7 +2,10 @@ package com.example.demo;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class DashboardControl {
     @FXML private Label lbKaryawan, lbShift, lbKelompok, lbMasuk, lbKeluar, lbPopUp , lbShiftpop, lbStatus;
     @FXML private Pane pnMasuk, pnShift, pnStatus;
     @FXML private TableView<RekapAbsensi> tabelAbsensi;
-    @FXML private TableColumn<RekapAbsensi, String> colNo, colNama, colShift, colTanggal, colWaktuMasuk, colWaktuKeluar,colJenis, colStatus;
+    @FXML private TableColumn<RekapAbsensi, String> colNo, colNama, colShift, colTanggal, colWaktuMasuk, colWaktuKeluar,colJenis, colStatus, colDurasi;
     
 
     private MongoDatabase database;
@@ -123,7 +126,7 @@ public class DashboardControl {
         colWaktuKeluar.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJamKeluar()));
         colStatus.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getStatus()));
         colJenis.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getJenisAbsen()));
-
+        colDurasi.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getDurasiKerja()));
         
    cbStatus.setOnAction(event -> {
     String selectedStatus = cbStatus.getSelectionModel().getSelectedItem();
@@ -313,7 +316,7 @@ private void handleSimpan() {
                 .append("waktuKeluar", txtKeluar.getText());
               
         collection.insertOne(doc);
-        listAbsensi.add(new RekapAbsensi(nama, shift, tanggal.toString(), null, txtMasuk.getText(), txtKeluar.getText(), jenis, hari, status));
+        listAbsensi.add(new RekapAbsensi(nama, shift, tanggal.toString(),null , null, txtMasuk.getText(), txtKeluar.getText(), jenis, hari, status));
         hidePopup(popAbsen);
         showAlert("Data Absensi berhasil disimpan!", Alert.AlertType.INFORMATION);
         clearFields();
@@ -326,31 +329,60 @@ private void handleSimpan() {
 private void loadAbsen() {
     ObservableList<RekapAbsensi> listAbsensi = FXCollections.observableArrayList();
     
+    // Pastikan variabel database sudah terdefinisi sebagai MongoDatabase
     MongoCollection<Document> rekapAbsensiCollection = database.getCollection("Absensi");
 
     LocalDate today = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     String todayString = today.format(formatter);
 
+    // Query untuk cari dokumen dengan tanggal hari ini
     for (Document doc : rekapAbsensiCollection.find(new Document("tanggal", todayString))) {
         String rfid = doc.getString("rfid");
-        String nama = doc.getString("nama"); // Ambil langsung dari Absensi
-        String shift = doc.getString("shift"); // Ambil langsung dari Absensi
+        String nama = doc.getString("nama"); // Ambil nama langsung dari dokumen Absensi
+        String shift = doc.getString("shift");
         String jamMasuk = doc.getString("waktu");
         String jamKeluar = doc.getString("waktuKeluar");
         String jenis = doc.getString("jenisAbsen");
         String status = doc.getString("status");
 
-        if (jenis.equals("keluar")) {
+        // Jika jenis absen adalah "keluar", pastikan status juga "keluar"
+        if ("keluar".equalsIgnoreCase(jenis)) {
             status = "keluar";
         }
 
-        listAbsensi.add(new RekapAbsensi(nama, shift, todayString, null, jamMasuk, jamKeluar, status, null, jenis));
+        // Hitung durasi kerja dalam menit
+        long durasiMenit = 0;
+        if (jamMasuk != null && jamKeluar != null) {
+            try {
+                LocalTime waktuMasuk = parseWaktu(jamMasuk);
+                LocalTime waktuKeluar = parseWaktu(jamKeluar);
+
+                if (waktuKeluar.isBefore(waktuMasuk)) {
+                    // Shift malam, keluar keesokan harinya
+                    durasiMenit = ChronoUnit.MINUTES.between(waktuMasuk, waktuKeluar.plusHours(24));
+                } else {
+                    durasiMenit = ChronoUnit.MINUTES.between(waktuMasuk, waktuKeluar);
+                }
+            } catch (DateTimeParseException e) {
+                System.err.println("Format waktu salah: " + e.getMessage());
+            }
+        }
+
+        // Format durasi ke "HH:mm"
+        String durasiFormatted = String.format("%02d:%02d", durasiMenit / 60, durasiMenit % 60);
+        System.out.println("Durasi: " + durasiFormatted);
+
+        // Buat objek RekapAbsensi dan tambahkan ke list
+        listAbsensi.add(new RekapAbsensi(
+            nama, shift, todayString, durasiFormatted, 
+            null, jamMasuk, jamKeluar, status, null, jenis));
     }
 
-    // Set listAbsensi ke tabel Anda
+    // Set listAbsensi ke tabel JavaFX Anda
     tabelAbsensi.setItems(listAbsensi);
 }
+
 private void showPopup(StackPane popup) {
         popup.setVisible(true);
         FadeTransition fadeIn = new FadeTransition(javafx.util.Duration.millis(500), popup);
@@ -572,5 +604,22 @@ if (filter != null) {
         cbJenis.setPromptText("Pilih status");
         txtKeluar.setPromptText("Masukkan jam keluar");
     }
+
+  private LocalTime parseWaktu(String waktuStr) {
+    DateTimeFormatter[] formatters = new DateTimeFormatter[] {
+        DateTimeFormatter.ofPattern("HH:mm:ss"),
+        DateTimeFormatter.ofPattern("HH:mm")
+    };
+
+    for (DateTimeFormatter fmt : formatters) {
+        try {
+            return LocalTime.parse(waktuStr, fmt);
+        } catch (DateTimeParseException e) {
+            // coba formatter lain
+        }
+    }
+    throw new DateTimeParseException("Format waktu tidak dikenali", waktuStr, 0);
+}
+
 
 }

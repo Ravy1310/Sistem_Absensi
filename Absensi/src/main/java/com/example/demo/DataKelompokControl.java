@@ -4,9 +4,8 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
-import static com.mongodb.client.model.Filters.all;
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.result.UpdateResult;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -14,7 +13,6 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -141,37 +139,48 @@ public void initialize() {
         
     }
 
-    private void handleUpdate() {
-        Kelompok selectedKelompok = tabelkelompok.getSelectionModel().getSelectedItem();
+ private void handleUpdate() {
+    Kelompok selectedKelompok = tabelkelompok.getSelectionModel().getSelectedItem();
     if (selectedKelompok != null) {
-        // Ambil data terbaru dari form
         String nama = cmbnama.getValue();
         String shift = cmbshift.getValue();
         String hari = cmbhari.getValue();
 
-        if (nama.isEmpty() || shift.isEmpty() || hari.isEmpty()) {
+        if (nama == null || shift == null || hari == null ||
+            nama.isEmpty() || shift.isEmpty() || hari.isEmpty()) {
             showAlert("Semua field harus diisi!", Alert.AlertType.ERROR);
             return;
         }
 
         MongoCollection<Document> kelompokCollection = database.getCollection("KelompokKerja");
-        Document updatedData = new Document("$set", new Document("nama", nama)
-                .append("shift", shift)
-                .append("hari", hari));
-        kelompokCollection.updateOne(new Document("nama", nama), updatedData);
 
+        // Filter berdasarkan nama dan hari
+        Document filter = new Document("nama", nama).append("hari", hari);
+
+        // Data yang akan diupdate hanya shift-nya
+        Document updatedData = new Document("$set", new Document("shift", shift));
+
+        UpdateResult result = kelompokCollection.updateOne(filter, updatedData);
+
+        System.out.println("Matched: " + result.getMatchedCount() + ", Modified: " + result.getModifiedCount());
+
+        if (result.getMatchedCount() == 0) {
+            showAlert("Data tidak ditemukan untuk diperbarui!", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // Update local object dan refresh tabel
         selectedKelompok.setNama(nama);
         selectedKelompok.setshift(shift);
         selectedKelompok.setHari(hari);
-       
-        tabelkelompok.refresh(); 
+        tabelkelompok.refresh();
 
         hidePopup(Popkelompok);
         showAlert("Data kelompok berhasil diperbarui!", Alert.AlertType.INFORMATION);
     } else {
         showAlert("Pilih kelompok yang ingin diperbarui!", Alert.AlertType.WARNING);
     }
-    }
+}
 
     private void handleHapus() {
     Kelompok selectedKelompok = tabelkelompok.getSelectionModel().getSelectedItem();
@@ -261,7 +270,7 @@ private void loadDataKaryawan() {
         ParallelTransition hide = new ParallelTransition(fadeOut, slideUp);
         hide.setOnFinished(e -> {
             popup.setVisible(false);
-            // lbpopup.setText("Tambah Data Karyawan"); 
+            lbpopup.setText("Data Kelompok Kerja"); 
         });
     
         hide.play();

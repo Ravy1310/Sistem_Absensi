@@ -135,6 +135,7 @@ private void loadAbsen() {
         String jam = doc.getString("waktu");
         String jenis = doc.getString("jenisAbsen");
         String status = doc.getString("status");
+        String shift = doc.getString("shift");
 
         if(jenis.equals("keluar")) {
             jam = doc.getString("waktuKeluar");
@@ -147,14 +148,14 @@ private void loadAbsen() {
             MongoCollection<Document> kelompokKerjaCollection = database.getCollection("KelompokKerja");
             Document kelompokDoc = kelompokKerjaCollection.find(new Document("rfid", rfid)).first();
             String nama = kelompokDoc != null ? kelompokDoc.getString("nama") : "Nama Tidak Ditemukan";
-            String shift = kelompokDoc != null ? kelompokDoc.getString("shift") : "Shift Tidak Ditemukan";
+           
 
 if (kelompokDoc != null) {
-    System.out.println("Shift ditemukan untuk RFID " + rfid + ": " + shift);
+    System.out.println("Shift ditemukan untuk RFID " + rfid );
 }
 
             // Masukkan data ke dalam listAbsensi
-            listAbsensi.add(new RekapAbsensi(nama, shift, tanggal, jam, null, null, status, null, jenis));
+            listAbsensi.add(new RekapAbsensi(nama, shift, tanggal,null, jam, null, null, status, null, jenis));
         }
     }
 

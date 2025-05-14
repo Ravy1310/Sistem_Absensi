@@ -102,7 +102,7 @@ colNama.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getVal
             status = "keluar";
         }
 
-        listAbsensi.add(new RekapAbsensi(nama, shift, todayString, null, jamMasuk, jamKeluar, status, null, jenis));
+        listAbsensi.add(new RekapAbsensi(nama, shift, todayString,null, null, jamMasuk, jamKeluar, status, null, jenis));
          tblRekap.setItems(listAbsensi);
     }
 

@@ -7,6 +7,7 @@ public class RekapAbsensi {
     private String tanggal;
     private String jamMasuk;
     private String jamKeluar;
+    private String durasiKerja;
     private String status;
     private String jam;
     // Field tambahan untuk rekapAbsensi
@@ -18,11 +19,12 @@ public class RekapAbsensi {
     }
 
     // Constructor dengan parameter (opsional)
-    public RekapAbsensi(String nama, String shift, String tanggal, String jam, String jamMasuk, String jamKeluar, String status, String namaHari, String jenisAbsen) {
+    public RekapAbsensi(String nama, String shift, String tanggal,String DurasiKerja, String jam, String jamMasuk, String jamKeluar, String status, String namaHari, String jenisAbsen) {
         this.jam = jam;
         this.nama = nama;
         this.shift = shift;
         this.tanggal = tanggal;
+        this.durasiKerja = DurasiKerja;
         this.jamMasuk = jamMasuk;
         this.jamKeluar = jamKeluar;
         this.status = status;
@@ -103,5 +105,16 @@ public class RekapAbsensi {
 
     public void setJenisAbsen(String jenisAbsen) {
         this.jenisAbsen = jenisAbsen;
+    }
+
+    public void getDurasiKerja(String durasiKerja) {
+        this.durasiKerja = durasiKerja;
+    }
+    public String getDurasiKerja() {
+        return durasiKerja;
+    }
+
+    public void setDurasiKerja(String durasiKerja) {
+        this.durasiKerja = durasiKerja;
     }
 }

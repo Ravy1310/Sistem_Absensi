@@ -48,7 +48,7 @@ public class JamKerjaControl {
     @FXML
     private void initialize() {
     ObservableList<String> jamKerjaList = FXCollections.observableArrayList(
-        "00:00", "01:00", "02:00", "03:00", "04:00",
+       "--", "00:00", "01:00", "02:00", "03:00", "04:00",
         "05:00", "06:00", "07:00", "08:00", "09:00", "10:00",
         "11:00", "12:00", "13:00", "14:00", "15:00", "16:00",
         "17:00", "18:00", "19:00", "20:00", "21:00", "22:00",
@@ -245,46 +245,55 @@ public class JamKerjaControl {
     String mulai = cbmulai.getValue();
     String selesai = cbselesai.getValue();
 
-    if (mulai == null || selesai == null || shift.isEmpty()) {
-        System.out.println("Semua field harus diisi!");
+    if (shift.isEmpty()) {
+        showAlert("Shift harus diisi!", Alert.AlertType.ERROR);
         return;
     }
 
+    // Jika shift adalah "Libur", abaikan validasi waktu
+    if (!shift.equalsIgnoreCase("Libur")) {
+        if (mulai == null || selesai == null || mulai.equals("--") || selesai.equals("--")) {
+            showAlert("Waktu mulai dan selesai harus diisi untuk shift kerja!", Alert.AlertType.ERROR);
+            return;
+        }
+    }
+
     try {
-    LocalTime waktuMulai = LocalTime.parse(mulai);
-    LocalTime waktuSelesai = LocalTime.parse(selesai);
-    LocalDateTime mulaiDateTime = LocalDateTime.of(LocalDate.now(), waktuMulai);
-    LocalDateTime selesaiDateTime = LocalDateTime.of(LocalDate.now(), waktuSelesai);
+        String hasilDurasi = "0 jam";
+        if (!shift.equalsIgnoreCase("Libur")) {
+            LocalTime waktuMulai = LocalTime.parse(mulai);
+            LocalTime waktuSelesai = LocalTime.parse(selesai);
+            LocalDateTime mulaiDateTime = LocalDateTime.of(LocalDate.now(), waktuMulai);
+            LocalDateTime selesaiDateTime = LocalDateTime.of(LocalDate.now(), waktuSelesai);
 
-    
-    if (selesaiDateTime.isBefore(mulaiDateTime)) {
-        selesaiDateTime = selesaiDateTime.plusDays(1);
-    }
-    java.time.Duration durasi = java.time.Duration.between(mulaiDateTime, selesaiDateTime);
-    
-    
-    String hasilDurasi = durasi.toHours() + " jam ";
+            if (selesaiDateTime.isBefore(mulaiDateTime)) {
+                selesaiDateTime = selesaiDateTime.plusDays(1);
+            }
+            java.time.Duration durasi = java.time.Duration.between(mulaiDateTime, selesaiDateTime);
+            hasilDurasi = durasi.toHours() + " jam ";
+        }
 
-    
-    MongoCollection<Document> jamKerja = database.getCollection("JamKerja");
-    Document doc = new Document("shift", shift)
-            .append("waktuMulai", mulai)
-            .append("waktuSelesai", selesai)
-            .append("durasi", hasilDurasi);
+        MongoCollection<Document> jamKerja = database.getCollection("JamKerja");
+        Document doc = new Document("shift", shift)
+                .append("waktuMulai", shift.equalsIgnoreCase("Libur") ? "-" : mulai)
+                .append("waktuSelesai", shift.equalsIgnoreCase("Libur") ? "-" : selesai)
+                .append("durasi", hasilDurasi);
 
-    jamKerja.insertOne(doc);
+        jamKerja.insertOne(doc);
 
-    
-    JamKerja.add(new jamkerja(shift, mulai, selesai, hasilDurasi));
-    tabeljam.setItems(JamKerja);
+        JamKerja.add(new jamkerja(shift, 
+                shift.equalsIgnoreCase("Libur") ? "-" : mulai,
+                shift.equalsIgnoreCase("Libur") ? "-" : selesai,
+                hasilDurasi));
+        tabeljam.setItems(JamKerja);
 
-    clearFields();
-    showAlert("Data Karyawan berhasil disimpan!", Alert.AlertType.INFORMATION);
-    }
-    catch (Exception e) {
+        clearFields();
+        showAlert("Data Shift berhasil disimpan!", Alert.AlertType.INFORMATION);
+    } catch (Exception e) {
         showAlert("Format waktu tidak valid!", Alert.AlertType.ERROR);
     }
 }
+
 
 
     private void hidePopup(StackPane popup) {

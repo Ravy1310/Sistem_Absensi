@@ -107,7 +107,7 @@
                   <Image url="@../icon/kelompok%20kerja.png" />
                </image>
             </ImageView>
-            <Label fx:id="lbKelompok" layoutX="166.0" layoutY="107.0" prefHeight="38.0" prefWidth="13.0" text="4" textFill="WHITE">
+            <Label fx:id="lbKelompok" layoutX="149.0" layoutY="107.0" prefHeight="38.0" prefWidth="60.0" text="4" textFill="WHITE">
                <font>
                   <Font name="Century Schoolbook Bold" size="30.0" />
                </font>
@@ -135,6 +135,7 @@
             <TableColumn fx:id="colTanggal" prefWidth="123.33334350585938" text="Tanggal" />
             <TableColumn fx:id="colWaktuMasuk" prefWidth="129.33331298828125" text="Jam Masuk" />
             <TableColumn fx:id="colWaktuKeluar" prefWidth="126.0" text="Jam Pulang" />
+            <TableColumn fx:id="colDurasi" prefWidth="126.0" text="Durasi" />
             <TableColumn fx:id="colJenis" prefWidth="126.0" text="Jenis Absen" />
             <TableColumn fx:id="colStatus" prefWidth="126.0" text="Status" />
         </columns>
