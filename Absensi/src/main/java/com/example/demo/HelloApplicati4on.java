@@ -22,7 +22,7 @@ public class HelloApplicati4on extends Application {
     primaryStage.setWidth(screenBounds.getWidth());
     primaryStage.setHeight(screenBounds.getHeight());
         primaryStage.show();
-       
+    
 
     }
 

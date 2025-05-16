@@ -108,7 +108,7 @@
                         <Pane layoutX="3.0" layoutY="155.0" prefHeight="64.0" prefWidth="635.0" styleClass="pnn-2" stylesheets="@datajamkerja.css">
                            <children>
                               <ComboBox fx:id="cbselesai" layoutX="145.0" layoutY="5.0" prefHeight="33.0" prefWidth="330.0" promptText="Pilih Waktu " styleClass="txt" stylesheets="@../Data%20Karyawan/datakaryawan.css" />
-                              <Label layoutX="14.0" layoutY="14.0" prefWidth="704.0" styleClass="lbb-1" stylesheets="@datajamkerja.css" text="Waktu Selesai">
+                              <Label layoutX="7.0" layoutY="14.0" prefHeight="16.0" prefWidth="124.0" styleClass="lbb-1" stylesheets="@datajamkerja.css" text="Waktu Selesai">
                                  <font>
                                     <Font name="Century Schoolbook" size="13.0" />
                                  </font>

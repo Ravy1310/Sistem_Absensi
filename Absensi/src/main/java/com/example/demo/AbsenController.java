@@ -141,6 +141,10 @@ private void loadAbsen() {
             String nama = kelompokDoc != null ? kelompokDoc.getString("nama") : "Nama Tidak Ditemukan";
             String shift = kelompokDoc != null ? kelompokDoc.getString("shift") : "Shift Tidak Ditemukan";
 
+if (kelompokDoc != null) {
+    System.out.println("Shift ditemukan untuk RFID " + rfid + ": " + shift);
+}
+
             // Masukkan data ke dalam listAbsensi
             listAbsensi.add(new RekapAbsensi(nama, shift, tanggal, jam, null, null, status, null, jenis));
         }
@@ -251,28 +255,23 @@ private void simpanKeRekapAbsensi(String rfid) {
                     waktuMinimalKeluar = waktuSelesaiShift.plusHours(durasiLemburInt);
                 }
 
-                if (sekarang.isBefore(waktuMinimalKeluar)) {
-               Platform.runLater(() -> {
+if (sekarang.isBefore(waktuMinimalKeluar)) {
+    Platform.runLater(() -> {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Peringatan");
         alert.setHeaderText(null);
         alert.setContentText("Belum waktunya keluar");
         alert.getButtonTypes().setAll(ButtonType.OK);
         alert.initModality(Modality.APPLICATION_MODAL);
-
-        alert.show();
-         alert.setOnCloseRequest(event -> {
+        
+        alert.showAndWait();
+        
+        alert.setOnCloseRequest(event -> {
             System.out.println("Alert ditutup");
         });
-
-
-
-        // Letakkan return logic di sini jika perlu menghentikan proses lebih lanjut
-        // Misal: menonaktifkan tombol, atau sekadar tidak melanjutkan
     });
-    return; // <-
-                }
-
+    return; 
+}
                 // Simpan absen keluar
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                 String waktuFormatted = LocalDateTime.now().format(formatter);

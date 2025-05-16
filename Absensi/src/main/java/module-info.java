@@ -1,11 +1,14 @@
 module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.bson;
     requires org.mongodb.driver.core;
     requires java.xml;
+
     requires jbcrypt;
+    
     requires javafx.base;
     requires javafx.graphics;
 

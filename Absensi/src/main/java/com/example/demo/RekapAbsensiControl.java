@@ -217,7 +217,7 @@ cbTahun.valueProperty().addListener((obs, oldVal, newVal) -> {
         }
     }
 
-   private void loadRekapData() {
+    private void loadRekapData() {
     ObservableList<RekapBulanan> data = FXCollections.observableArrayList();
     MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
 
