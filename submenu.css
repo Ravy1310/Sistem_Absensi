@@ -1,0 +1,49 @@
+.pane{
+    -fx-background-color: #ffffff;
+}
+.button-1{
+    -fx-background-color: #ffffff ;
+}
+.buttonprfrm{
+    -fx-background-color: #ffffff ;
+}
+.dk{
+    -fx-background-color: #ffffff;
+}
+.djk{
+    -fx-background-color: #ffffff;
+}
+.dkk{
+    -fx-background-color: #ffffff;
+}
+.RA{
+    -fx-background-color: #ffffff;
+}
+.pl{
+    -fx-background-color: #ffffff;
+}
+.button-1:hover {
+    -fx-background-color: #d9d9d9;
+} 
+.dk:hover {
+    -fx-background-color: #d9d9d9;
+} 
+.djk:hover {
+    -fx-background-color: #d9d9d9;
+} 
+.dkk:hover {
+    -fx-background-color: #d9d9d9;
+} 
+.RA:hover {
+    -fx-background-color: #d9d9d9;
+} 
+.pl:hover {
+    -fx-background-color: #d9d9d9;
+} 
+
+.bdpane {
+    -fx-background-color: #d6d6d6;
+}
+.buttonprfrm:hover {
+    -fx-background-color: #d9d9d9;
+} 
