@@ -136,7 +136,7 @@
                      <graphic>
                         <ImageView fitHeight="39.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../../../../../image%2028.png" />
+                              <Image url="@../icon/permorma.png" />
                            </image>
                         </ImageView>
                      </graphic>

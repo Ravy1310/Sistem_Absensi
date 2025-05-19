@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@peforma.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.performaControl">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@peforma.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.performaControl">
    <children>
       <Label layoutX="28.0" layoutY="21.0" stylesheets="@peforma.css" text="PERFORMA">
          <font>
@@ -22,5 +22,11 @@
             <Font name="Century Schoolbook" size="20.0" />
          </font>
       </Label>
+      <Label layoutX="645.0" layoutY="84.0" text="Bulan">
+         <font>
+            <Font name="Century Schoolbook" size="20.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="comboBulan" layoutX="731.0" layoutY="80.0" prefHeight="32.0" prefWidth="155.0" styleClass="cmbbulan" stylesheets="@peforma.css" />
    </children>
 </Pane>

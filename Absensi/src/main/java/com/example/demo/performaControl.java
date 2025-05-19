@@ -1,7 +1,10 @@
 package com.example.demo;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.bson.Document;
 
@@ -15,31 +18,43 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ComboBox;
 
-
 public class performaControl {
 
-     @FXML
+    @FXML
     private ComboBox<String> comboNama;
+
+    @FXML
+    private ComboBox<String> comboBulan;
 
     @FXML
     private PieChart pieChart;
 
     private MongoDatabase database;
+
     public performaControl() {
         database = MongoDBConnection.getDatabase();
     }
-    @FXML 
+
+    @FXML
     private void initialize() {
         loadNamaKaryawan();
+        loadBulan();
 
-        comboNama.setOnAction(event -> {
-            String selectedNama = comboNama.getValue();
-            if (selectedNama != null && !selectedNama.isEmpty()) {
-                loadChartData(selectedNama);
-            }
-        });
+        comboNama.setOnAction(event -> triggerLoadChart());
+        comboBulan.setOnAction(event -> triggerLoadChart());
     }
-     private void loadNamaKaryawan() {
+
+    private void triggerLoadChart() {
+        String selectedNama = comboNama.getValue();
+        String selectedBulan = comboBulan.getValue();
+        if (selectedNama != null && !selectedNama.isEmpty() &&
+            selectedBulan != null && !selectedBulan.isEmpty()) {
+            resetChart();
+            loadChartData(selectedNama, selectedBulan);
+        }
+    }
+
+    private void loadNamaKaryawan() {
         MongoCollection<Document> collection = database.getCollection("rekapAbsensi");
         Set<String> namaSet = new HashSet<>();
 
@@ -56,35 +71,117 @@ public class performaControl {
         comboNama.setItems(FXCollections.observableArrayList(namaSet));
     }
 
-    private void loadChartData(String namaKaryawan) {
+    private void loadBulan() {
         MongoCollection<Document> collection = database.getCollection("rekapAbsensi");
+        Set<String> bulanSet = new HashSet<>();
 
-        int hadir = 0, izin = 0, sakit = 0, alpha = 0;
-
-        try (MongoCursor<Document> cursor = collection.find(new Document("nama", namaKaryawan)).iterator()) {
+        try (MongoCursor<Document> cursor = collection.find().iterator()) {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
-                String status = doc.getString("status");
-                if (status == null) continue;
-
-                switch (status.toLowerCase()) {
-                    case "hadir" -> hadir++;
-                    case "izin" -> izin++;
-                    case "sakit" -> sakit++;
-                    case "alpha", "alpa", "absen" -> alpha++;
+                String bulan = doc.getString("bulan"); // format "yyyy-MM"
+                if (bulan != null && !bulan.isEmpty()) {
+                    bulanSet.add(bulan);
                 }
             }
         }
 
-        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList(
-            new PieChart.Data("Hadir", hadir),
-            new PieChart.Data("Izin", izin),
-            new PieChart.Data("Sakit", sakit),
-            new PieChart.Data("Alpha", alpha)
-        );
+        comboBulan.setItems(FXCollections.observableArrayList(bulanSet));
+    }
+
+    private void loadChartData(String namaKaryawan, String selectedBulan) {
+        MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
+        MongoCollection<Document> absenCollection = database.getCollection("Absensi");
+
+        int hadir = 0, izin = 0, sakit = 0, alpha = 0;
+        int tepatWaktu = 0, terlambat = 0;
+
+        // Ambil data rekapAbsensi
+        Document rekapQuery = new Document("nama",
+            new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
+                .append("$options", "i"))
+            .append("bulan", selectedBulan);
+
+        try (MongoCursor<Document> cursor = rekapCollection.find(rekapQuery).iterator()) {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                hadir += doc.getInteger("masuk", 0);
+                izin += doc.getInteger("izin", 0);
+                sakit += doc.getInteger("sakit", 0);
+                alpha += doc.getInteger("alfa", 0);
+            }
+        }
+
+        // Format untuk parsing tanggal di Absensi
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate selectedDate;
+        try {
+            selectedDate = LocalDate.parse(selectedBulan + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception e) {
+            System.err.println("Format selectedBulan tidak valid: " + selectedBulan);
+            return;
+        }
+
+        // Ambil data absensi (status hadir)
+        try (MongoCursor<Document> cursor = absenCollection.find(
+            new Document("nama", new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
+                .append("$options", "i"))
+        ).iterator()) {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                String tanggalStr = doc.getString("tanggal");
+                String status = doc.getString("status");
+
+                if (tanggalStr != null && status != null) {
+                    try {
+                        LocalDate tanggal = LocalDate.parse(tanggalStr, formatter);
+
+                        if (tanggal.getMonth() == selectedDate.getMonth() &&
+                            tanggal.getYear() == selectedDate.getYear()) {
+                            
+                            status = status.trim().toLowerCase();
+                            if (status.equals("tepat waktu")) {
+                                tepatWaktu++;
+                            } else if (status.equals("terlambat")) {
+                                terlambat++;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Format tanggal tidak valid: " + tanggalStr);
+                    }
+                }
+            }
+        }
+
+        // Tampilkan hasil ke PieChart
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+
+        if (hadir + izin + sakit + alpha + tepatWaktu + terlambat == 0) {
+            chartData.add(new PieChart.Data("Tidak Ada Data", 1));
+        } else {
+           
+            if (izin > 0) chartData.add(new PieChart.Data("Izin", izin));
+            if (sakit > 0) chartData.add(new PieChart.Data("Sakit", sakit));
+            if (alpha > 0) chartData.add(new PieChart.Data("Alpha", alpha));
+            if (tepatWaktu > 0) chartData.add(new PieChart.Data("Hadir (Tepat Waktu)", tepatWaktu));
+    if (terlambat > 0) chartData.add(new PieChart.Data("Hadir (Terlambat)", terlambat));
+   }
 
         pieChart.setData(chartData);
-        pieChart.setTitle("Statistik Kehadiran: " + namaKaryawan);
+        pieChart.setTitle("Statistik: " + namaKaryawan + " (" + selectedBulan + ")");
+        pieChart.setLabelsVisible(true);
+        pieChart.setLegendVisible(true);
+
+        System.out.println("Hasil Rekap:");
+        System.out.println("Hadir: " + hadir + ", Izin: " + izin + ", Sakit: " + sakit + ", Alpha: " + alpha);
+        System.out.println("Tepat Waktu: " + tepatWaktu + ", Terlambat: " + terlambat);
+    }
+
+    private void resetChart() {
+        pieChart.getData().clear();
+        pieChart.setTitle("");
+        pieChart.setLabelsVisible(false);
+        pieChart.setLegendVisible(false);
+        System.out.println("Chart di-reset.");
     }
 }
-    
