@@ -45,7 +45,7 @@ import javafx.stage.Stage;
 
 public class AbsenController implements Initializable {
     @FXML
-    private Pane panelogin;
+    private Pane panelogin, btnriwayat;
     @FXML TextField txtRFID;
 
     @FXML
@@ -89,6 +89,13 @@ colNama.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getVal
     colStatus.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatus()));
 
 
+     panelogin.setOnMouseClicked(event -> {
+        loadPage("/com/example/demo/Login/login.fxml", event);
+    });
+
+    btnriwayat.setOnMouseClicked(event -> {
+        loadPage("/com/example/demo/riwayat/rekapabsensi.fxml", event);
+    });
     txtRFID.textProperty().addListener((observable, oldValue, newValue) -> {
     if (newValue.length() == 10) { // Panjang RFID
         if (rfidTerdaftar(newValue)) {
@@ -105,6 +112,7 @@ colNama.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getVal
 
         Platform.runLater(() -> txtRFID.clear());
     }
+   
 });
 loadAbsen();
     }
@@ -325,10 +333,7 @@ private String getHariDalamBahasaIndonesia(DayOfWeek dayOfWeek) {
 
    
 
-    @FXML
-    private void HandleMouse(MouseEvent event) throws IOException {
-        loadPage("/com/example/demo/Login/Login.fxml", event);
-    }
+  
 
     private void loadPage(String fxmlFile, MouseEvent event) {
         try {

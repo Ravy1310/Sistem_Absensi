@@ -95,7 +95,6 @@ public class performaControl {
         int hadir = 0, izin = 0, sakit = 0, alpha = 0;
         int tepatWaktu = 0, terlambat = 0;
 
-        // Ambil data rekapAbsensi
         Document rekapQuery = new Document("nama",
             new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
                 .append("$options", "i"))
@@ -111,18 +110,16 @@ public class performaControl {
             }
         }
 
-        // Format untuk parsing tanggal di Absensi
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         LocalDate selectedDate;
         try {
-            selectedDate = LocalDate.parse(selectedBulan + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            selectedDate = LocalDate.parse(selectedBulan + "-01", formatter);
         } catch (Exception e) {
             System.err.println("Format selectedBulan tidak valid: " + selectedBulan);
             return;
         }
 
-        // Ambil data absensi (status hadir)
         try (MongoCursor<Document> cursor = absenCollection.find(
             new Document("nama", new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
                 .append("$options", "i"))
@@ -153,24 +150,37 @@ public class performaControl {
             }
         }
 
-        // Tampilkan hasil ke PieChart
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
 
         if (hadir + izin + sakit + alpha + tepatWaktu + terlambat == 0) {
             chartData.add(new PieChart.Data("Tidak Ada Data", 1));
         } else {
-           
             if (izin > 0) chartData.add(new PieChart.Data("Izin", izin));
             if (sakit > 0) chartData.add(new PieChart.Data("Sakit", sakit));
             if (alpha > 0) chartData.add(new PieChart.Data("Alpha", alpha));
             if (tepatWaktu > 0) chartData.add(new PieChart.Data("Hadir (Tepat Waktu)", tepatWaktu));
-    if (terlambat > 0) chartData.add(new PieChart.Data("Hadir (Terlambat)", terlambat));
-   }
+            if (terlambat > 0) chartData.add(new PieChart.Data("Hadir (Terlambat)", terlambat));
+        }
 
         pieChart.setData(chartData);
         pieChart.setTitle("Statistik: " + namaKaryawan + " (" + selectedBulan + ")");
         pieChart.setLabelsVisible(true);
         pieChart.setLegendVisible(true);
+
+        // Atur warna slice PieChart langsung lewat kode Java:
+        String[] colors = {
+             "#e74c3c", // Alpha - merah
+            "#3498db", // Izin - biru
+            "#4CAF50", // Hadir (Tepat Waktu) - hijau toska
+             "#9b59b6", // Sakit - ungu
+            "#e67e22"  // Hadir (Terlambat) - oranye
+        };
+
+        for (int i = 0; i < chartData.size(); i++) {
+            PieChart.Data data = chartData.get(i);
+            String color = colors[i % colors.length];
+            data.getNode().setStyle("-fx-pie-color: " + color + ";");
+        }
 
         System.out.println("Hasil Rekap:");
         System.out.println("Hadir: " + hadir + ", Izin: " + izin + ", Sakit: " + sakit + ", Alpha: " + alpha);

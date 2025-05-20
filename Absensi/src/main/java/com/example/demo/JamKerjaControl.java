@@ -202,7 +202,7 @@ public class JamKerjaControl {
             tabeljam.refresh(); 
     
             hidePopup(popjam);
-            showAlert("Data karyawan berhasil diperbarui!", Alert.AlertType.INFORMATION);
+            showAlert("Data Jam Kerja berhasil diperbarui!", Alert.AlertType.INFORMATION);
         clearFields();
         
     } catch (Exception e) {

@@ -1,3 +1,30 @@
 .body {
     -fx-background-color: #fefefe;
 }
+
+.chart-pie.data0.chart-series-pie {
+    -fx-pie-color: #4CAF50; /* Hijau untuk Hadir (Tepat Waktu) */
+}
+
+.chart-pie.data1.chart-series-pie {
+    -fx-pie-color: #FF9800; /* Oranye untuk Hadir (Terlambat) */
+}
+
+.chart-pie.data2.chart-series-pie {
+    -fx-pie-color: #03A9F4; /* Biru untuk Izin */
+}
+
+.chart-pie.data3.chart-series-pie {
+    -fx-pie-color: #9C27B0; /* Ungu untuk Sakit */
+}
+
+.chart-pie.data4.chart-series-pie {
+    -fx-pie-color: #F44336; /* Merah untuk Alpha */
+}
+
+.txt{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20px;
+}
