@@ -12,6 +12,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -89,103 +90,168 @@ public class performaControl {
     }
 
     private void loadChartData(String namaKaryawan, String selectedBulan) {
-        MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
-        MongoCollection<Document> absenCollection = database.getCollection("Absensi");
+    System.out.println("Loading chart for: " + namaKaryawan + " - " + selectedBulan);
+    
+    MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
+    MongoCollection<Document> absenCollection = database.getCollection("Absensi");
 
-        int hadir = 0, izin = 0, sakit = 0, alpha = 0;
-        int tepatWaktu = 0, terlambat = 0;
+    int hadir = 0, izin = 0, sakit = 0, alpha = 0;
+    int tepatWaktu = 0, terlambat = 0;
 
-        Document rekapQuery = new Document("nama",
-            new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
-                .append("$options", "i"))
-            .append("bulan", selectedBulan);
+    // Query untuk rekapAbsensi
+    Document rekapQuery = new Document("nama",
+        new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
+            .append("$options", "i"))
+        .append("bulan", selectedBulan);
 
-        try (MongoCursor<Document> cursor = rekapCollection.find(rekapQuery).iterator()) {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                hadir += doc.getInteger("masuk", 0);
-                izin += doc.getInteger("izin", 0);
-                sakit += doc.getInteger("sakit", 0);
-                alpha += doc.getInteger("alfa", 0);
-            }
+    System.out.println("Rekap Query: " + rekapQuery.toJson());
+
+    // Ambil data dari rekapAbsensi
+    try (MongoCursor<Document> cursor = rekapCollection.find(rekapQuery).iterator()) {
+        boolean foundRekapData = false;
+        while (cursor.hasNext()) {
+            foundRekapData = true;
+            Document doc = cursor.next();
+            System.out.println("Rekap Document: " + doc.toJson());
+            
+            hadir += doc.getInteger("masuk", 0);
+            izin += doc.getInteger("izin", 0);
+            sakit += doc.getInteger("sakit", 0);
+            alpha += doc.getInteger("alfa", 0);
         }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        LocalDate selectedDate;
-        try {
-            selectedDate = LocalDate.parse(selectedBulan + "-01", formatter);
-        } catch (Exception e) {
-            System.err.println("Format selectedBulan tidak valid: " + selectedBulan);
-            return;
+        
+        if (!foundRekapData) {
+            System.out.println("Tidak ada data rekap ditemukan untuk: " + namaKaryawan + " - " + selectedBulan);
         }
+    } catch (Exception e) {
+        System.err.println("Error querying rekapAbsensi: " + e.getMessage());
+    }
 
-        try (MongoCursor<Document> cursor = absenCollection.find(
-            new Document("nama", new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
-                .append("$options", "i"))
-        ).iterator()) {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                String tanggalStr = doc.getString("tanggal");
-                String status = doc.getString("status");
+    // Parse tanggal untuk filter absensi
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate selectedDate;
+    try {
+        selectedDate = LocalDate.parse(selectedBulan + "-01", formatter);
+    } catch (Exception e) {
+        System.err.println("Format selectedBulan tidak valid: " + selectedBulan);
+        return;
+    }
 
-                if (tanggalStr != null && status != null) {
-                    try {
-                        LocalDate tanggal = LocalDate.parse(tanggalStr, formatter);
+    // Query untuk Absensi
+    Document absenQuery = new Document("nama", 
+        new Document("$regex", "^" + Pattern.quote(namaKaryawan.trim()) + "$")
+            .append("$options", "i"));
+    
+    System.out.println("Absen Query: " + absenQuery.toJson());
 
-                        if (tanggal.getMonth() == selectedDate.getMonth() &&
-                            tanggal.getYear() == selectedDate.getYear()) {
-                            
-                            status = status.trim().toLowerCase();
-                            if (status.equals("tepat waktu")) {
-                                tepatWaktu++;
-                            } else if (status.equals("terlambat")) {
-                                terlambat++;
-                            }
+    // Ambil data dari Absensi
+    try (MongoCursor<Document> cursor = absenCollection.find(absenQuery).iterator()) {
+        boolean foundAbsenData = false;
+        while (cursor.hasNext()) {
+            Document doc = cursor.next();
+            String tanggalStr = doc.getString("tanggal");
+            String status = doc.getString("status");
+
+            if (tanggalStr != null && status != null) {
+                try {
+                    LocalDate tanggal = LocalDate.parse(tanggalStr, formatter);
+
+                    if (tanggal.getMonth() == selectedDate.getMonth() &&
+                        tanggal.getYear() == selectedDate.getYear()) {
+                        
+                        foundAbsenData = true;
+                        status = status.trim().toLowerCase();
+                        
+                        if (status.equals("tepat waktu")) {
+                            tepatWaktu++;
+                        } else if (status.equals("terlambat")) {
+                            terlambat++;
                         }
-                    } catch (Exception e) {
-                        System.err.println("Format tanggal tidak valid: " + tanggalStr);
+                        
+                        System.out.println("Processed: " + tanggalStr + " - " + status);
                     }
+                } catch (Exception e) {
+                    System.err.println("Format tanggal tidak valid: " + tanggalStr);
                 }
             }
         }
-
-        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
-
-        if (hadir + izin + sakit + alpha + tepatWaktu + terlambat == 0) {
-            chartData.add(new PieChart.Data("Tidak Ada Data", 1));
-        } else {
-            if (izin > 0) chartData.add(new PieChart.Data("Izin", izin));
-            if (sakit > 0) chartData.add(new PieChart.Data("Sakit", sakit));
-            if (alpha > 0) chartData.add(new PieChart.Data("Alpha", alpha));
-            if (tepatWaktu > 0) chartData.add(new PieChart.Data("Hadir (Tepat Waktu)", tepatWaktu));
-            if (terlambat > 0) chartData.add(new PieChart.Data("Hadir (Terlambat)", terlambat));
+        
+        if (!foundAbsenData) {
+            System.out.println("Tidak ada data absensi ditemukan untuk bulan: " + selectedBulan);
         }
+    } catch (Exception e) {
+        System.err.println("Error querying Absensi: " + e.getMessage());
+    }
 
+    // Debug output
+    System.out.println("Final counts - Hadir: " + hadir + ", Izin: " + izin + 
+                      ", Sakit: " + sakit + ", Alpha: " + alpha + 
+                      ", Tepat Waktu: " + tepatWaktu + ", Terlambat: " + terlambat);
+
+    // Buat data chart
+    ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+
+    // Gunakan total hadir dari rekap, bukan dari detail absensi
+    int totalData = hadir + izin + sakit + alpha;
+    
+    if (totalData == 0) {
+        System.out.println("Tidak ada data untuk ditampilkan");
+        chartData.add(new PieChart.Data("Tidak Ada Data", 1));
+    } else {
+        // Prioritaskan data dari rekapAbsensi
+        if (hadir > 0) {
+            // Jika ada breakdown tepat waktu/terlambat, gunakan itu
+            if (tepatWaktu + terlambat > 0) {
+                if (tepatWaktu > 0) chartData.add(new PieChart.Data("Hadir (Tepat Waktu)", tepatWaktu));
+                if (terlambat > 0) chartData.add(new PieChart.Data("Hadir (Terlambat)", terlambat));
+                
+                // Jika masih ada sisa hadir yang tidak tercatat detail
+                int sisaHadir = hadir - (tepatWaktu + terlambat);
+                if (sisaHadir > 0) {
+                    chartData.add(new PieChart.Data("Hadir (Lainnya)", sisaHadir));
+                }
+            } else {
+                // Jika tidak ada breakdown, tampilkan total hadir
+                chartData.add(new PieChart.Data("Hadir", hadir));
+            }
+        }
+        
+        if (izin > 0) chartData.add(new PieChart.Data("Izin", izin));
+        if (sakit > 0) chartData.add(new PieChart.Data("Sakit", sakit));
+        if (alpha > 0) chartData.add(new PieChart.Data("Alpha", alpha));
+    }
+
+    System.out.println("Chart data size: " + chartData.size());
+
+    // Update chart
+    Platform.runLater(() -> {
         pieChart.setData(chartData);
         pieChart.setTitle("Statistik: " + namaKaryawan + " (" + selectedBulan + ")");
         pieChart.setLabelsVisible(true);
         pieChart.setLegendVisible(true);
 
-        // Atur warna slice PieChart langsung lewat kode Java:
-        String[] colors = {
-             "#e74c3c", // Alpha - merah
-            "#3498db", // Izin - biru
-            "#4CAF50", // Hadir (Tepat Waktu) - hijau toska
-             "#9b59b6", // Sakit - ungu
-            "#e67e22"  // Hadir (Terlambat) - oranye
-        };
+        // Atur warna
+        if (!chartData.isEmpty() && !chartData.get(0).getName().equals("Tidak Ada Data")) {
+            String[] colors = {
+                "#4CAF50", // Hadir - hijau
+                "#e67e22", // Hadir (Terlambat) - oranye  
+                "#3498db", // Izin - biru
+                "#9b59b6", // Sakit - ungu
+                "#e74c3c", // Alpha - merah
+                "#95a5a6"  // Lainnya - abu
+            };
 
-        for (int i = 0; i < chartData.size(); i++) {
-            PieChart.Data data = chartData.get(i);
-            String color = colors[i % colors.length];
-            data.getNode().setStyle("-fx-pie-color: " + color + ";");
+            for (int i = 0; i < chartData.size() && i < colors.length; i++) {
+                PieChart.Data data = chartData.get(i);
+                if (data.getNode() != null) {
+                    data.getNode().setStyle("-fx-pie-color: " + colors[i] + ";");
+                }
+            }
         }
+    });
 
-        System.out.println("Hasil Rekap:");
-        System.out.println("Hadir: " + hadir + ", Izin: " + izin + ", Sakit: " + sakit + ", Alpha: " + alpha);
-        System.out.println("Tepat Waktu: " + tepatWaktu + ", Terlambat: " + terlambat);
-    }
+    System.out.println("Chart loading completed");
+}
 
     private void resetChart() {
         pieChart.getData().clear();
