@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import org.bson.Document;
 
@@ -18,6 +19,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,6 +53,29 @@ public class RekapAbsensiControl {
 
     @FXML
     private void initialize() {
+        setupComboBoxes();
+        setupEventHandlers();
+        setupTableColumns();
+        setupTableListeners();
+        
+        // Load data existing dulu untuk response yang cepat
+        loadRekapData();
+        
+        // Jalankan perhitungan di background thread
+        CompletableFuture.runAsync(() -> {
+            try {
+                calculateAndUpdateDailyDuration();
+                rekapBulanan();
+                
+                // Update UI di JavaFX thread
+                Platform.runLater(() -> loadRekapData());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void setupComboBoxes() {
         cbBulan.getItems().addAll(
             "01", "02", "03", "04", "05", "06", 
             "07", "08", "09", "10", "11", "12"
@@ -62,15 +87,14 @@ public class RekapAbsensiControl {
 
         cbBulan.setValue(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")));
         cbTahun.setValue(String.valueOf(tahunSekarang));
+    }
 
-        btnCari.setOnAction(event -> {
-            handleCari();
-        });
+    private void setupEventHandlers() {
+        btnCari.setOnAction(event -> handleCari());
+        imCari.setOnMouseClicked(event -> handleCari());
+    }
 
-        imCari.setOnMouseClicked(event -> {
-            handleCari();
-        });
-
+    private void setupTableColumns() {
         colNo.setCellFactory(tc -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -86,7 +110,9 @@ public class RekapAbsensiControl {
         colSakit.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cell.getValue().getSakit())));
         colAlfa.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(String.valueOf(cell.getValue().getAlfa())));
         colDurasi.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getDurasi()));
+    }
 
+    private void setupTableListeners() {
         cbBulan.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (cbTahun.getValue() != null && newVal != null) {
                 filterRekapBulanan();
@@ -98,95 +124,63 @@ public class RekapAbsensiControl {
                 filterRekapBulanan();
             }
         });
-
-        filterRekapBulanan();
-        calculateAndUpdateDailyDuration(); // Hitung dan update durasi harian
-        rekapBulanan(); // Proses otomatis  
-        loadRekapData(); // Tampilkan ke tabel
     }
 
-    /**
-     * Metode baru untuk menghitung dan memperbarui durasi harian
-     * dengan mengurangi waktu keluar dengan waktu masuk
-     */
     private void calculateAndUpdateDailyDuration() {
         MongoCollection<Document> absensiCollection = database.getCollection("Absensi");
         
-        // Mencari semua data absen dengan jenisAbsen "keluar" karena data tersebut sudah memiliki waktuKeluar
-        for (Document doc : absensiCollection.find(Filters.eq("jenisAbsen", "keluar"))) {
-            String idAbsensi = doc.getString("id_absensi");
-            // Jika id_absensi tidak ada, gunakan _id sebagai alternatif
-            if (idAbsensi == null) {
-                Object objId = doc.getObjectId("_id");
-                if (objId != null) {
-                    idAbsensi = objId.toString();
-                } else {
-                    continue; // Tidak ada identifier yang dapat digunakan
-                }
-            }
-            
+        // Optimasi: hanya proses data bulan ini dan yang belum memiliki durasi
+        String bulanIni = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        
+        Document filter = new Document("jenisAbsen", "keluar")
+            .append("tanggal", new Document("$regex", "^" + bulanIni))
+            .append("$or", List.of(
+                new Document("durasi", new Document("$exists", false)),
+                new Document("durasi", null),
+                new Document("durasi", "")
+            ));
+        
+        for (Document doc : absensiCollection.find(filter)) {
             String waktuMasukStr = doc.getString("waktu");
             String waktuKeluarStr = doc.getString("waktuKeluar");
             
-            // Skip jika waktu masuk atau waktu keluar tidak ada
-            if (waktuMasukStr == null || waktuKeluarStr == null || waktuMasukStr.isEmpty() || waktuKeluarStr.isEmpty()) {
+            if (waktuMasukStr == null || waktuKeluarStr == null || 
+                waktuMasukStr.isEmpty() || waktuKeluarStr.isEmpty()) {
                 continue;
             }
             
             try {
-                // Konversi string waktu ke LocalTime dengan penanganan format yang berbeda
-                LocalTime waktuMasuk;
-                LocalTime waktuKeluar;
+                LocalTime waktuMasuk = parseLocalTime(waktuMasukStr);
+                LocalTime waktuKeluar = parseLocalTime(waktuKeluarStr);
                 
-                // Mendeteksi format waktu dan menggunakan format yang sesuai (HH:mm:ss atau HH:mm)
-                if (waktuMasukStr.matches("\\d{2}:\\d{2}:\\d{2}")) {
-                    waktuMasuk = LocalTime.parse(waktuMasukStr, DateTimeFormatter.ofPattern("HH:mm:ss"));
-                } else {
-                    waktuMasuk = LocalTime.parse(waktuMasukStr, DateTimeFormatter.ofPattern("HH:mm"));
-                }
-                
-                if (waktuKeluarStr.matches("\\d{2}:\\d{2}:\\d{2}")) {
-                    waktuKeluar = LocalTime.parse(waktuKeluarStr, DateTimeFormatter.ofPattern("HH:mm:ss"));
-                } else {
-                    waktuKeluar = LocalTime.parse(waktuKeluarStr, DateTimeFormatter.ofPattern("HH:mm"));
-                }
-                
-                // Hitung durasi dalam menit
-                long durasiMenit;
-                if (waktuKeluar.isBefore(waktuMasuk)) {
-                    // Asumsi shift malam yang melewati tengah malam
-                    // Tambahkan 24 jam (1440 menit) ke waktu keluar
-                    durasiMenit = Duration.between(waktuMasuk, waktuKeluar.plusHours(24)).toMinutes();
-                } else {
-                    durasiMenit = Duration.between(waktuMasuk, waktuKeluar).toMinutes();
-                }
-                
-                // Format durasi ke format jam:menit
+                long durasiMenit = calculateDurationInMinutes(waktuMasuk, waktuKeluar);
                 String durasiFormatted = formatDuration(durasiMenit);
                 
-                // Update dokumen dengan durasi yang dihitung
                 Document update = new Document("$set", new Document("durasi", durasiFormatted)
                         .append("durasiMenit", durasiMenit));
                 
-                // Gunakan _id jika id_absensi tidak ada
-                if (idAbsensi.contains("ObjectId")) {
-                    absensiCollection.updateOne(Filters.eq("_id", doc.getObjectId("_id")), update);
-                } else {
-                    absensiCollection.updateOne(Filters.eq("id_absensi", idAbsensi), update);
-                }
+                absensiCollection.updateOne(Filters.eq("_id", doc.getObjectId("_id")), update);
                 
-                System.out.println("Updated duration for " + (idAbsensi.contains("ObjectId") ? "_id" : "id_absensi") + 
-                                  ": " + idAbsensi + 
-                                  " - Masuk: " + waktuMasukStr + 
-                                  " - Keluar: " + waktuKeluarStr + 
-                                  " - Durasi: " + durasiFormatted + 
-                                  " (" + durasiMenit + " menit)");
             } catch (Exception e) {
-                System.out.println("Error calculating duration for ID: " + idAbsensi + 
-                                  " - Masuk: " + waktuMasukStr + 
-                                  " - Keluar: " + waktuKeluarStr + 
-                                  " - Error: " + e.getMessage());
+                System.err.println("Error calculating duration for ID: " + doc.getObjectId("_id") + " - " + e.getMessage());
             }
+        }
+    }
+
+    private LocalTime parseLocalTime(String timeStr) {
+        if (timeStr.matches("\\d{2}:\\d{2}:\\d{2}")) {
+            return LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        } else {
+            return LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
+        }
+    }
+
+    private long calculateDurationInMinutes(LocalTime start, LocalTime end) {
+        if (end.isBefore(start)) {
+            // Shift malam yang melewati tengah malam
+            return Duration.between(start, end.plusHours(24)).toMinutes();
+        } else {
+            return Duration.between(start, end).toMinutes();
         }
     }
 
@@ -195,40 +189,33 @@ public class RekapAbsensiControl {
         String selectedBulan = cbBulan.getValue();
         String selectedTahun = cbTahun.getValue();
 
-        // Jika bulan dan tahun tidak dipilih, tampilkan semua data
-        if (selectedBulan != null && selectedTahun != null) {
-            // Ambil semua data rekap dari database
-            ObservableList<RekapBulanan> allData = FXCollections.observableArrayList();
-            MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
-            String bulanFinal = selectedTahun + "-" + selectedBulan;
-
-            for (Document doc : rekapCollection.find(Filters.eq("bulan", bulanFinal))) {
-                String nama = doc.getString("nama");
-                int masuk = doc.getInteger("masuk", 0);
-                int izin = doc.getInteger("izin", 0);
-                int sakit = doc.getInteger("sakit", 0);
-                int alfa = doc.getInteger("alfa", 0);
-                String durasi = doc.getString("durasi");
-                if (durasi == null) durasi = "00:00";
-
-                allData.add(new RekapBulanan(nama, bulanFinal, masuk, izin, sakit, alfa, durasi));
-            }
-
-            // Filter data berdasarkan nama dan bulan/tahun yang dipilih
-            ObservableList<RekapBulanan> filteredData = FXCollections.observableArrayList();
-
-            for (RekapBulanan data : allData) {
-                boolean matchesNama = data.getNama().toLowerCase().contains(keyword);
-                boolean matchesBulanTahun = data.getBulan().equals(bulanFinal);
-
-                if (matchesNama && matchesBulanTahun) {
-                    filteredData.add(data);
-                }
-            }
-
-            // Update tabel dengan data yang sudah difilter
-            tblRekap.setItems(filteredData);
+        if (selectedBulan == null || selectedTahun == null) {
+            return;
         }
+
+        String bulanFinal = selectedTahun + "-" + selectedBulan;
+        ObservableList<RekapBulanan> filteredData = FXCollections.observableArrayList();
+        MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
+
+        // Optimasi: gunakan regex MongoDB untuk search
+        Document query = new Document("bulan", bulanFinal);
+        if (!keyword.isEmpty()) {
+            query.append("nama", new Document("$regex", keyword).append("$options", "i"));
+        }
+
+        for (Document doc : rekapCollection.find(query)) {
+            String nama = doc.getString("nama");
+            int masuk = doc.getInteger("masuk", 0);
+            int izin = doc.getInteger("izin", 0);
+            int sakit = doc.getInteger("sakit", 0);
+            int alfa = doc.getInteger("alfa", 0);
+            String durasi = doc.getString("durasi");
+            if (durasi == null) durasi = "00:00";
+
+            filteredData.add(new RekapBulanan(nama, bulanFinal, masuk, izin, sakit, alfa, durasi));
+        }
+
+        tblRekap.setItems(filteredData);
     }
 
     private void rekapBulanan() {
@@ -247,47 +234,31 @@ public class RekapAbsensiControl {
             semuaTanggal.add(firstDay.withDayOfMonth(i).toString());
         }
 
+        // Cache nama to RFID mapping
         Map<String, String> namaToRfid = new HashMap<>();
         for (Document doc : karyawanCollection.find()) {
             String nama = doc.getString("nama");
             String rfid = doc.getString("rfid");
-            namaToRfid.put(nama, rfid);
+            if (nama != null && rfid != null) {
+                namaToRfid.put(nama, rfid);
+            }
         }
 
         Map<String, int[]> rekapMap = new HashMap<>();
         Map<String, Map<String, Integer>> kehadiranPerTanggal = new HashMap<>();
-        Map<String, Long> totalDurasiMap = new HashMap<>(); // Untuk menyimpan total durasi kerja dalam menit
+        Map<String, Long> totalDurasiMap = new HashMap<>();
 
-        // Proses data kehadiran dari koleksi Absensi
-        for (Document doc : absensiCollection.find()) {
+        // Optimasi: filter hanya data bulan ini
+        Document absensiFilter = new Document("tanggal", new Document("$regex", "^" + bulanIni));
+        
+        for (Document doc : absensiCollection.find(absensiFilter)) {
             String tanggal = doc.getString("tanggal");
-            if (tanggal == null || !tanggal.startsWith(bulanIni)) continue;
-
             String nama = doc.getString("nama");
             String status = doc.getString("jenisAbsen").toLowerCase();
             
             // Ambil durasi yang sudah dihitung
-String waktuMasukStr = doc.getString("waktu");
-String waktuKeluarStr = doc.getString("waktuKeluar");
-
-Duration waktuMasuk = parseWaktu(waktuMasukStr);
-Duration waktuKeluar = parseWaktu(waktuKeluarStr);
-
-long durasiMenit = 0;
-if (waktuMasuk != null && waktuKeluar != null) {
-    if (waktuKeluar.compareTo(waktuMasuk) < 0) {
-        // Shift malam, keluar di hari berikutnya
-        durasiMenit = waktuKeluar.plusHours(24).minus(waktuMasuk).toMinutes();
-    } else {
-        durasiMenit = waktuKeluar.minus(waktuMasuk).toMinutes();
-    }
-}
-doc.put("durasiMenit", durasiMenit);
-
-         
-            
-            // Tambahkan durasi ke total
-            if (durasiMenit > 0) {
+            Long durasiMenit = doc.getLong("durasiMenit");
+            if (durasiMenit != null && durasiMenit > 0) {
                 totalDurasiMap.put(nama, totalDurasiMap.getOrDefault(nama, 0L) + durasiMenit);
             }
 
@@ -311,80 +282,85 @@ doc.put("durasiMenit", durasiMenit);
             }
         }
 
+        // Hitung alfa hanya jika akhir bulan
         if (today.getDayOfMonth() == daysInMonth) {
-            for (String nama : namaToRfid.keySet()) {
-                String rfid = namaToRfid.get(nama);
-                
-                // Himpunan tanggal di mana karyawan hadir (setidaknya sekali)
-                Set<String> hariHadir = new HashSet<>();
-                if (kehadiranPerTanggal.containsKey(nama)) {
-                    hariHadir.addAll(kehadiranPerTanggal.get(nama).keySet());
-                }
-
-                // Ambil semua shift berdasarkan rfid dan hari dari koleksi KelompokKerja
-                Map<String, Integer> shiftPerHari = new HashMap<>(); // Menyimpan jumlah shift per hari
-                Map<String, Boolean> liburPerHari = new HashMap<>(); // Menyimpan status libur per hari
-                
-                for (Document shiftDoc : kelompokKerjaCollection.find(Filters.eq("rfid", rfid))) {
-                    String hari = shiftDoc.getString("hari").toLowerCase(); // e.g. "kamis"
-                    String shift = shiftDoc.getString("shift");              // e.g. "libur"
-                    
-                    // Increment jumlah shift untuk hari tersebut
-                    shiftPerHari.put(hari, shiftPerHari.getOrDefault(hari, 0) + 1);
-                    
-                    // Tandai jika ada shift libur pada hari tersebut
-                    if (shift.equalsIgnoreCase("libur")) {
-                        liburPerHari.put(hari, true);
-                    }
-                }
-
-                int liburHari = 0;
-                int totalShiftWajib = 0;
-                
-                for (String tanggal : semuaTanggal) {
-                    LocalDate tgl = LocalDate.parse(tanggal);
-                    String hariInggris = tgl.getDayOfWeek().name().toLowerCase(); // e.g. "thursday"
-                    String hariIndonesia = getHariIndonesia(hariInggris);        // e.g. "kamis"
-                    
-                    // Jika hari ini adalah hari libur, tambahkan ke hitungan hari libur
-                    if (liburPerHari.getOrDefault(hariIndonesia, false)) {
-                        liburHari++;
-                        continue; // Lanjut ke tanggal berikutnya
-                    }
-                    
-                    // Hitung total shift wajib untuk hari ini
-                    int shiftHariIni = shiftPerHari.getOrDefault(hariIndonesia, 1); // Default 1 shift jika tidak ada konfigurasi
-                    totalShiftWajib += shiftHariIni;
-                }
-                
-                // Hitung total kehadiran (accounting for multiple shifts in a day)
-                int totalKehadiran = 0;
-                if (kehadiranPerTanggal.containsKey(nama)) {
-                    Map<String, Integer> kehadiranHarian = kehadiranPerTanggal.get(nama);
-                    for (int count : kehadiranHarian.values()) {
-                        totalKehadiran += count;
-                    }
-                }
-                
-                // Hitung alfa berdasarkan total shift wajib dikurangi total kehadiran
-                int alfa = totalShiftWajib - totalKehadiran;
-                if (alfa < 0) alfa = 0;
-
-                System.out.println("Nama: " + nama);
-                System.out.println("  Total hari dalam bulan: " + semuaTanggal.size());
-                System.out.println("  Total hari hadir: " + hariHadir.size());
-                System.out.println("  Total shift wajib: " + totalShiftWajib);
-                System.out.println("  Total kehadiran: " + totalKehadiran);
-                System.out.println("  Hari libur: " + liburHari);
-                System.out.println("  Alfa dihitung: " + alfa);
-                System.out.println("-----------------------------------");
-
-                // Update rekap alfa
-                rekapMap.putIfAbsent(nama, new int[]{0, 0, 0, 0});
-                rekapMap.get(nama)[3] = alfa; // Set nilai alfa yang benar
-            }
+            calculateAlfa(namaToRfid, kehadiranPerTanggal, rekapMap, semuaTanggal, kelompokKerjaCollection);
         }
 
+        // Simpan ke database
+        saveRekapToDatabase(rekapMap, totalDurasiMap, namaToRfid, bulanIni, rekapCollection);
+    }
+
+    private void calculateAlfa(Map<String, String> namaToRfid, 
+                             Map<String, Map<String, Integer>> kehadiranPerTanggal,
+                             Map<String, int[]> rekapMap,
+                             List<String> semuaTanggal,
+                             MongoCollection<Document> kelompokKerjaCollection) {
+        
+        for (String nama : namaToRfid.keySet()) {
+            String rfid = namaToRfid.get(nama);
+            
+            // Himpunan tanggal di mana karyawan hadir
+            Set<String> hariHadir = new HashSet<>();
+            if (kehadiranPerTanggal.containsKey(nama)) {
+                hariHadir.addAll(kehadiranPerTanggal.get(nama).keySet());
+            }
+
+            // Cache shift data per hari
+            Map<String, Integer> shiftPerHari = new HashMap<>();
+            Map<String, Boolean> liburPerHari = new HashMap<>();
+            
+            for (Document shiftDoc : kelompokKerjaCollection.find(Filters.eq("rfid", rfid))) {
+                String hari = shiftDoc.getString("hari").toLowerCase();
+                String shift = shiftDoc.getString("shift");
+                
+                shiftPerHari.put(hari, shiftPerHari.getOrDefault(hari, 0) + 1);
+                
+                if (shift.equalsIgnoreCase("libur")) {
+                    liburPerHari.put(hari, true);
+                }
+            }
+
+            int totalShiftWajib = 0;
+            
+            for (String tanggal : semuaTanggal) {
+                LocalDate tgl = LocalDate.parse(tanggal);
+                String hariInggris = tgl.getDayOfWeek().name().toLowerCase();
+                String hariIndonesia = getHariIndonesia(hariInggris);
+                
+                if (liburPerHari.getOrDefault(hariIndonesia, false)) {
+                    continue; // Skip hari libur
+                }
+                
+                int shiftHariIni = shiftPerHari.getOrDefault(hariIndonesia, 1);
+                totalShiftWajib += shiftHariIni;
+            }
+            
+            // Hitung total kehadiran
+            int totalKehadiran = 0;
+            if (kehadiranPerTanggal.containsKey(nama)) {
+                Map<String, Integer> kehadiranHarian = kehadiranPerTanggal.get(nama);
+                for (int count : kehadiranHarian.values()) {
+                    totalKehadiran += count;
+                }
+            }
+            
+            // Hitung alfa
+            int alfa = totalShiftWajib - totalKehadiran;
+            if (alfa < 0) alfa = 0;
+
+            // Update rekap alfa
+            rekapMap.putIfAbsent(nama, new int[]{0, 0, 0, 0});
+            rekapMap.get(nama)[3] = alfa;
+        }
+    }
+
+    private void saveRekapToDatabase(Map<String, int[]> rekapMap, 
+                                   Map<String, Long> totalDurasiMap,
+                                   Map<String, String> namaToRfid,
+                                   String bulanIni,
+                                   MongoCollection<Document> rekapCollection) {
+        
         for (Map.Entry<String, int[]> entry : rekapMap.entrySet()) {
             String nama = entry.getKey();
             String rfid = namaToRfid.get(nama);
@@ -394,7 +370,6 @@ doc.put("durasiMenit", durasiMenit);
 
             Document filter = new Document("rfid", rfid).append("bulan", bulanIni);
             
-            // Format durasi ke format jam:menit
             long totalDurasi = totalDurasiMap.getOrDefault(nama, 0L);
             String durasiFormatted = formatDuration(totalDurasi);
             
@@ -417,26 +392,19 @@ doc.put("durasiMenit", durasiMenit);
         ObservableList<RekapBulanan> data = FXCollections.observableArrayList();
         MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
 
-        // Dapatkan bulan dan tahun saat ini dalam format "yyyy-MM"
         LocalDate today = LocalDate.now();
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
-        String currentMonth = today.format(monthFormatter);
+        String currentMonth = today.format(DateTimeFormatter.ofPattern("yyyy-MM"));
 
-        // Filter hanya data untuk bulan ini
-        for (Document doc : rekapCollection.find()) {
-            String bulan = doc.getString("bulan");
+        for (Document doc : rekapCollection.find(Filters.eq("bulan", currentMonth))) {
+            String nama = doc.getString("nama");
+            int masuk = doc.getInteger("masuk", 0);
+            int izin = doc.getInteger("izin", 0);
+            int sakit = doc.getInteger("sakit", 0);
+            int alfa = doc.getInteger("alfa", 0);
+            String durasi = doc.getString("durasi");
+            if (durasi == null) durasi = "00:00";
 
-            if (bulan != null && bulan.equals(currentMonth)) {
-                String nama = doc.getString("nama");
-                int masuk = doc.getInteger("masuk", 0);
-                int izin = doc.getInteger("izin", 0);
-                int sakit = doc.getInteger("sakit", 0);
-                int alfa = doc.getInteger("alfa", 0);
-                String durasi = doc.getString("durasi");
-                if (durasi == null) durasi = "00:00";
-
-                data.add(new RekapBulanan(nama, bulan, masuk, izin, sakit, alfa, durasi));
-            }
+            data.add(new RekapBulanan(nama, currentMonth, masuk, izin, sakit, alfa, durasi));
         }
 
         tblRekap.setItems(data);
@@ -447,7 +415,7 @@ doc.put("durasiMenit", durasiMenit);
         String tahun = cbTahun.getValue();
         if (bulan == null || tahun == null) return;
 
-        String bulanFinal = tahun + "-" + bulan; // contoh: "2025-05"
+        String bulanFinal = tahun + "-" + bulan;
 
         ObservableList<RekapBulanan> data = FXCollections.observableArrayList();
         MongoCollection<Document> rekapCollection = database.getCollection("rekapAbsensi");
@@ -485,17 +453,4 @@ doc.put("durasiMenit", durasiMenit);
             default -> englishDay;
         };
     }
-
-  private Duration parseWaktu(String waktu) {
-    if (waktu == null || waktu.isEmpty()) {
-        return Duration.ZERO;
-    }
-
-    String[] parts = waktu.split(":");
-    int jam = Integer.parseInt(parts[0]);
-    int menit = Integer.parseInt(parts[1]);
-    return Duration.ofHours(jam).plusMinutes(menit);
-}
-
-
 }

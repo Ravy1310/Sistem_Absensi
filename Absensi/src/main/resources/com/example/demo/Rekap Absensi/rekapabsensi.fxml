@@ -52,7 +52,7 @@
                </columnResizePolicy>
             </TableView>
             <Line endX="951.0" endY="1.52587890625E-5" layoutX="14.0" layoutY="89.0" startX="-14.000011444091797" startY="1.52587890625E-5" />
-            <ImageView fx:id="imCari" fitHeight="18.0" fitWidth="27.0" layoutX="810.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imCari" fitHeight="18.0" fitWidth="27.0" layoutX="809.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Icon/cari.png" />
                </image>
