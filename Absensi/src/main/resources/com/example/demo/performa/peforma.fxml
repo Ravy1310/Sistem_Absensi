@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1059.0" styleClass="body" stylesheets="@peforma.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.performaControl">
+   <children>
+      <Label layoutX="28.0" layoutY="21.0" stylesheets="@peforma.css" text="PERFORMA">
+         <font>
+            <Font name="Century Schoolbook" size="25.0" />
+         </font>
+      </Label>
+      <Line endX="957.0" endY="-7.62939453125E-6" layoutX="102.0" layoutY="67.0" startX="-100.0" />
+      <PieChart fx:id="pieChart" layoutX="131.0" layoutY="123.0" prefHeight="456.0" prefWidth="799.0" styleClass="piechart" stylesheets="@peforma.css" />
+      <ComboBox fx:id="comboNama" layoutX="228.0" layoutY="79.0" prefHeight="32.0" prefWidth="229.0" styleClass="cmbnama" stylesheets="@peforma.css" />
+      <Label layoutX="148.0" layoutY="83.0" text="Nama">
+         <font>
+            <Font name="Century Schoolbook" size="20.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

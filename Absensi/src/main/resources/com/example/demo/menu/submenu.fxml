@@ -25,7 +25,7 @@
                   <Font name="Century Schoolbook Bold" size="15.0" />
                </font>
             </Label>
-            <VBox layoutY="113.0" prefHeight="345.0" prefWidth="202.0" styleClass="vBox" stylesheets="@submenu.css">
+            <VBox layoutY="113.0" prefHeight="406.0" prefWidth="202.0" styleClass="vBox" stylesheets="@submenu.css">
                <children>
                   <Button fx:id="btndashboard" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="button-1" stylesheets="@submenu.css" text="Dashboard">
                      <graphic>
@@ -84,7 +84,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </Button>
-                  <Button fx:id="btnrekap" mnemonicParsing="false" prefHeight="55.0" prefWidth="200.0" styleClass="RA" stylesheets="@submenu.css" text="Rekap Absensi">
+                  <Button fx:id="btnrekap" mnemonicParsing="false" prefHeight="41.0" prefWidth="199.0" styleClass="RA" stylesheets="@submenu.css" text="Rekap Absensi">
                      <graphic>
                         <ImageView fitHeight="28.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -126,6 +126,21 @@
                         <Font size="14.0" />
                      </font>
                   </Button>
+                  <Button fx:id="btnperforma" mnemonicParsing="false" prefHeight="49.0" prefWidth="199.0" styleClass="pl" stylesheets="@submenu.css" text="Performa">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <padding>
+                        <Insets left="-50.0" />
+                     </padding>
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../../image%2028.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </VBox>
             <Button fx:id="btnLogOut" layoutY="574.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="199.0" styleClass="button-1" stylesheets="@submenu.css" text="  Log Out">
@@ -142,6 +157,6 @@
       </Pane>
    </left>
    <center>
-      <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" styleClass="buttonprfrm" stylesheets="@submenu.css" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
